@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1043799489264",
+    "project_id": "madcampweek3-a2ff0",
+    "storage_bucket": "madcampweek3-a2ff0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1043799489264:android:b580666ca36f570d602035",
+        "android_client_info": {
+          "package_name": "com.example.planit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEIYt6UWJil6CfybNzso6EqK0PjlxpdSM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
