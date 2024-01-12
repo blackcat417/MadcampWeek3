@@ -72,17 +72,20 @@ class _MainLoginState extends State<MainLoginScreen> {
               onPressed: () {
                 //!!!!!!!!!!!!클릭시 카카오 로그인을 하는 기능 추가 필요!!!!!!!!!!!!!
               },
-              child: Image.asset('assets/kakao_login_large_wide.png'),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Image.asset('assets/kakao_login_resize.png'),
             ),
           ),
 
-          // 버튼 배치
+
           Positioned(
             right: 50.0,
-            bottom: 50.0,
+            bottom: 65.0,
             left: 50.0,
             child: TextButton(
-              onPressed: () {//버튼 클릭 시 Signup 화면으로 이동
+              onPressed: () {//버튼 클릭 시 EmailLogin 화면으로 이동
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const EmailLoginScreen()),
@@ -95,7 +98,7 @@ class _MainLoginState extends State<MainLoginScreen> {
                 ),
                 backgroundColor: Colors.transparent,
               ),
-              child: Text('이메일로 로그인/회원가입'),
+              child: Text('이메일로 로그인 / 회원가입'),
             ),
           ),
         ],
