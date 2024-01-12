@@ -1,23 +1,19 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import 'MainLogin.dart';
-import 'EmailLogin.dart';
 
 void main() {
   runApp(const MyApp()); //앱 실행 명령어, 앱의 메인페이지를 적어주면 됨
 }
 
-class MyApp extends StatelessWidget { //앱의 메인페이지 만드는 법
+class MyApp extends StatelessWidget {
+  //앱의 메인페이지 만드는 법
   const MyApp({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context){
-
+  Widget build(BuildContext context) {
     return const MaterialApp(
       home: SplashScreen(),
     );
-
   }
 }
 
