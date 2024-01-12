@@ -1,125 +1,272 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MyApp()); //앱 실행 명령어, 앱의 메인페이지를 적어주면 됨
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
+class MyApp extends StatelessWidget { //앱의 메인페이지 만드는 법
+  const MyApp({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+  Widget build(BuildContext context){
+
+    return const MaterialApp(
+      home: SplashScreen(),
     );
+
   }
 }
 
+// 메인 화면 관련 선언
+// ignore: use_key_in_widget_constructors
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  // ignore: library_private_types_in_public_api
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  int _selectedIndex = 0;
 
-  void _incrementCounter() {
+  // 화면 리스트
+  final List<Widget> _screens = [
+    const HomeScreen(),
+    const TodoScreen(),
+    const CommunityScreen(),
+    const MarketScreen(),
+    const MyPageScreen(),
+  ];
+
+  // 탭 선택 시 호출될 함수
+  void _onItemTapped(int index) {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+      body: _screens[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'To Do',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            label: 'Community',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            label: 'Market',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            label: 'My',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        unselectedItemColor: const Color(0xFFEBD9C1),
+        selectedItemColor: const Color(0xFF4CACA8),
+        onTap: _onItemTapped,
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('Home Screen'),
+    );
+  }
+}
+
+class TodoScreen extends StatelessWidget {
+  const TodoScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('Todo Screen'),
+    );
+  }
+}
+
+class CommunityScreen extends StatelessWidget {
+  const CommunityScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('Community Screen'),
+    );
+  }
+}
+
+class MarketScreen extends StatelessWidget {
+  const MarketScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('Market Screen'),
+    );
+  }
+}
+
+class MyPageScreen extends StatelessWidget {
+  const MyPageScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text('My Page Screen'),
+    );
+  }
+}
+
+
+//Splash 화면 관련 선언
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // 3초 후에 홈 화면으로 전환
+    Timer(
+      const Duration(seconds: 3),
+          () => Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MainLoginScreen()),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/planit_splash.png'), // 스플래시 화면에 사용할 이미지
+            fit: BoxFit.cover,
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+//MainLogin 화면 전환
+
+class MainLoginScreen extends StatefulWidget {
+  const MainLoginScreen({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _MainLoginState createState() => _MainLoginState();
+}
+
+class _MainLoginState extends State<MainLoginScreen> {
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      body: Stack(
+        children: [
+          // 배경화면
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/planit_splash.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+
+          Positioned(
+            right: 50.0,
+            bottom: 115.0,  // 아래 여백 조절
+            left: 50.0,   // 왼쪽 여백 조절
+            child: MaterialButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignupScreen()),
+                );
+              },
+              child: Image.asset('assets/kakao_login_large_wide.png'),
+            ),
+          ),
+
+          // 버튼 배치
+          Positioned(
+            right: 50.0,
+            bottom: 50.0,  // 아래 여백 조절
+            left: 50.0,   // 왼쪽 여백 조절
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SignupScreen()),
+                );
+              },
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                textStyle: const TextStyle(
+                  fontSize: 18.0,
+                ),
+                backgroundColor: Colors.transparent, // 배경색을 투명으로 설정
+              ),
+              child: Text('이메일로 로그인/회원가입'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+//Signup 화면 관련 선언
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _SignupScreenState createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/planit_basicbackground.png'),
+            // 스플래시 화면에 사용할 이미지
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
     );
   }
 }
