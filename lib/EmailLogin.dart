@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:planit/MainLogin.dart';
 
 import 'Signup.dart';
+import 'http.dart';
 
 //Signup 화면 관련 선언
 class EmailLoginScreen extends StatefulWidget {
@@ -33,6 +34,13 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
               Image.asset(
                 'assets/planit_basicbackground_resize.png',
                 fit: BoxFit.cover,
+              ),
+
+              const Positioned(
+                left: 50.0,
+                right: 50.0,
+                top: 200.0,
+                child: Text('테스트용'),
               ),
 
               const Positioned(
@@ -96,7 +104,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                 left: 50.0,
                 child: MaterialButton(
                   onPressed: () {
-                    //!!!!!!!!!!클릭시 로그인 검증 기능 추가 필요!!!!!!!!!!!!!
+                    //!!!!!!!!!!클릭시 로그인 검증 기능 추가 필요
                   },
                   color: const Color(0xff169384),
                   shape: RoundedRectangleBorder(

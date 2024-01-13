@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'Community.dart';
 import 'Home.dart';
 import 'MainLogin.dart';
-import 'EmailLogin.dart';
 import 'Market.dart';
 import 'MyPage.dart';
 import 'Todo.dart';
