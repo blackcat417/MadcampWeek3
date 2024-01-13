@@ -1,9 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-
+import 'Community.dart';
+import 'Home.dart';
 import 'MainLogin.dart';
 import 'EmailLogin.dart';
+import 'Market.dart';
+import 'MyPage.dart';
+import 'Todo.dart';
 
 void main() {
   runApp(const MyApp()); //앱 실행 명령어, 앱의 메인페이지를 적어주면 됨
@@ -23,13 +26,13 @@ class MyApp extends StatelessWidget { //앱의 메인페이지 만드는 법
 
 // 메인 화면 관련 선언
 // ignore: use_key_in_widget_constructors
-class MyHomePage extends StatefulWidget {
+class Main extends StatefulWidget {
   @override
   // ignore: library_private_types_in_public_api
-  _MyHomePageState createState() => _MyHomePageState();
+  _MainState createState() => _MainState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MainState extends State<Main> {
   int _selectedIndex = 0;
 
   // 화면 리스트
@@ -59,19 +62,19 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
+            icon: Icon(Icons.checklist),
             label: 'To Do',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.people),
             label: 'Community',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.shopping_cart),
             label: 'Market',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.person),
             label: 'My',
           ),
         ],
@@ -80,61 +83,6 @@ class _MyHomePageState extends State<MyHomePage> {
         selectedItemColor: const Color(0xFF4CACA8),
         onTap: _onItemTapped,
       ),
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Home Screen'),
-    );
-  }
-}
-
-class TodoScreen extends StatelessWidget {
-  const TodoScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Todo Screen'),
-    );
-  }
-}
-
-class CommunityScreen extends StatelessWidget {
-  const CommunityScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Community Screen'),
-    );
-  }
-}
-
-class MarketScreen extends StatelessWidget {
-  const MarketScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Market Screen'),
-    );
-  }
-}
-
-class MyPageScreen extends StatelessWidget {
-  const MyPageScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('My Page Screen'),
     );
   }
 }
