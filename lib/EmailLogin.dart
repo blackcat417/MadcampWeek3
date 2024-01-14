@@ -1,9 +1,11 @@
 import 'dart:async';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:planit/MainLogin.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
 import 'Signup.dart';
+import 'main.dart';
 
 //Signup 화면 관련 선언
 class EmailLoginScreen extends StatefulWidget {
@@ -15,10 +17,54 @@ class EmailLoginScreen extends StatefulWidget {
 }
 
 class _EmailLoginScreenState extends State<EmailLoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+
+    void checkLoginToast() {
+      Fluttertoast.showToast(
+        msg: '잘못된 로그인 정보입니다',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white70,
+        textColor: Color(0xFF4CACA8),
+        fontSize: 16.0,
+      );
+    }
+
+    Future<void> login() async {
+      final response = await http.post(
+        Uri.parse('http://143.248.192.79:3000/login'), // 서버의 주소로 변경
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'Email': emailController.text,
+          'password': passwordController.text,
+        }),
+      );
+
+      print(emailController.text);
+      print(passwordController.text);
+      print(response.body);
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        print('Login successful');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Main()),
+        );
+      } else if (response.statusCode == 401) {
+        print('잘못된 로그인');
+        checkLoginToast();
+      } else {
+        print('Login failed');
+      }
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -35,14 +81,15 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                 fit: BoxFit.cover,
               ),
 
-              const Positioned(
+              Positioned(
                 left: 50.0,
                 top: 250.0,
                 right: 50.0,
                 child: SizedBox(
                   width: 300,
                   child: TextField(
-                    decoration: InputDecoration(
+                    controller: emailController,
+                    decoration: const InputDecoration(
                       labelText: 'E-mail',
                       labelStyle: TextStyle(color: Colors.black38),
                       focusedBorder: OutlineInputBorder(
@@ -62,7 +109,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                 ),
               ),
 
-              const Positioned(
+              Positioned(
                 left: 50.0,
                 top: 330.0,
                 right: 50.0,
@@ -70,7 +117,8 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                   width: 300,
                   child: TextField(
                     obscureText: true,
-                    decoration: InputDecoration(
+                    controller: passwordController,
+                    decoration: const InputDecoration(
                       labelText: '비밀번호',
                       labelStyle: TextStyle(color: Colors.black38),
                       focusedBorder: OutlineInputBorder(
@@ -96,7 +144,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                 left: 50.0,
                 child: MaterialButton(
                   onPressed: () {
-                    //!!!!!!!!!!클릭시 로그인 검증 기능 추가 필요!!!!!!!!!!!!!
+                    login();
                   },
                   color: const Color(0xff169384),
                   shape: RoundedRectangleBorder(

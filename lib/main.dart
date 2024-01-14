@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'Community.dart';
 import 'Home.dart';
 import 'MainLogin.dart';
-import 'EmailLogin.dart';
 import 'Market.dart';
 import 'MyPage.dart';
 import 'Todo.dart';
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget { //앱의 메인페이지 만드는 법
   @override
   Widget build(BuildContext context){
 
-    return const MaterialApp(
+    return MaterialApp(
       home: SplashScreen(),
     );
 

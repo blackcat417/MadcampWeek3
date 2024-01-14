@@ -1,7 +1,10 @@
 import 'dart:async';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:planit/EmailLogin.dart';
+import 'package:http/http.dart' as http;
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 //Signup 화면 관련 선언
 class SignupScreen extends StatefulWidget {
@@ -13,10 +16,58 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController checkPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+
+    void checkEmailToast() {
+      Fluttertoast.showToast(
+        msg: '이미 존재하는 E-mail입니다',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white70,
+        textColor: Color(0xFF4CACA8),
+        fontSize: 16.0,
+      );
+    }
+
+    void checkPWToast() {
+      Fluttertoast.showToast(
+        msg: '비밀번호가 일치하지 않습니다',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white70,
+        textColor: Color(0xFF4CACA8),
+        fontSize: 16.0,
+      );
+    }
+
+    Future<void> signup() async {
+      final response = await http.post(
+        Uri.parse('http://143.248.192.79:3000/signup'), // 서버의 주소로 변경
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'Email': emailController.text,
+          'password': passwordController.text,
+          'checkPassword': checkPasswordController.text,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Signup successful');
+      } else if (response.statusCode == 400) {
+        print('유저 이미 존재');
+        checkEmailToast();
+      } else {
+        print('Signup failed');
+      }
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -33,13 +84,14 @@ class _SignupScreenState extends State<SignupScreen> {
                 fit: BoxFit.cover,
               ),
 
-              const Positioned(
+              Positioned(
                 left: 50.0,
                 top: 250.0,
                 right: 50.0,
                 child: SizedBox(
                   width: 300,
                   child: TextField(
+                    controller: emailController,
                     decoration: InputDecoration(
                       labelText: 'E-mail',
                       labelStyle: TextStyle(color: Colors.black38),
@@ -60,13 +112,14 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
 
-              const Positioned(
+              Positioned(
                 left: 50.0,
                 top: 330.0,
                 right: 50.0,
                 child: SizedBox(
                   width: 300,
                   child: TextField(
+                    controller: passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       labelText: '비밀번호',
@@ -89,13 +142,14 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
 
 
-              const Positioned(
+              Positioned(
                 left: 50.0,
                 top: 410.0,
                 right: 50.0,
                 child: SizedBox(
                   width: 300,
                   child: TextField(
+                    controller: checkPasswordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       labelText: '비밀번호 확인',
@@ -117,16 +171,17 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
 
-
-
-
               Positioned(
                 right: 50.0,
                 top: 482.0,
                 left: 50.0,
                 child: MaterialButton(
                   onPressed: () {
-                    //!!!!!!!!!!클릭시 로그인 검증 기능 추가 필요!!!!!!!!!!!!!
+                    if(checkPasswordController.text!=passwordController.text){ //패스워드 검사랑 패스워드가 일치하지 않을 때
+                      checkPWToast();
+                    } else {
+                      signup(); //DB에 데이터 넣기
+                    }
                   },
                   color: const Color(0xff169384),
                   shape: RoundedRectangleBorder(
