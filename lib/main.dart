@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget { //앱의 메인페이지 만드는 법
   @override
   Widget build(BuildContext context){
 
-    return const MaterialApp(
+    return MaterialApp(
       home: SplashScreen(),
     );
 
