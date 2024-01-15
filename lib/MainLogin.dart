@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:planit/camera_ex.dart';
 import 'EmailLogin.dart';
 import 'main.dart';
 
@@ -62,6 +63,28 @@ class _MainLoginState extends State<MainLoginScreen> {
                 image: AssetImage('assets/planit_splash.png'),
                 fit: BoxFit.cover,
               ),
+            ),
+          ),
+
+          Positioned(
+            right: 50.0,
+            top: 65.0,
+            left: 50.0,
+            child: TextButton(
+              onPressed: () {//버튼 클릭 시 EmailLogin 화면으로 이동
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CameraExample()),
+                );
+              },
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                textStyle: const TextStyle(
+                  fontSize: 30.0,
+                ),
+                backgroundColor: Colors.transparent,
+              ),
+              child: Text('카메라 테스트 화면 전환 임시 버튼'),
             ),
           ),
 
