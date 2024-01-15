@@ -16,23 +16,6 @@ class AddMyPlantScreen extends StatefulWidget {
 }
 
 class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
-  DateTime selectedDate = DateTime.now();
-  TextEditingController _dateController = TextEditingController();
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-        _dateController.text = "${picked.toLocal()}".split(' ')[0];
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,19 +40,14 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                 top: 130.0,
                 child: ElevatedButton(
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SelectImageDialog();
-                      },
-                    );
+                    // 버튼이 클릭되었을 때 수행할 작업
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Color(0xFF025248),
                     fixedSize: Size(300, 50),
                   ),
-                  child: Icon(Icons.photo_camera,
-                      color: Colors.white), // 버튼 중앙에 표시할 아이콘
+                  child:
+                      Icon(Icons.photo_camera, color: Colors.white), // 버튼 중앙에 표시할 아이콘
                 ),
               ),
 
@@ -113,57 +91,18 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         borderSide:
-                            BorderSide(width: 1, color: Color(0xFF4CACA8)),
+                        BorderSide(width: 1, color: Color(0xFF4CACA8)),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         borderSide:
-                            BorderSide(width: 1, color: Color(0xFF4CACA8)),
+                        BorderSide(width: 1, color: Color(0xFF4CACA8)),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)),
                       ),
                     ),
                     keyboardType: TextInputType.emailAddress,
-                  ),
-                ),
-              ),
-
-              Positioned(
-                right: (screenWidth - 300) / 2,
-                top: 360.0,
-                child: SizedBox(
-                  width: 300,
-                  child: InkWell(
-                    onTap: () {
-                      _selectDate(context);
-                    },
-                    child: AbsorbPointer(
-                      child: TextField(
-                        controller: _dateController,
-                        decoration: InputDecoration(
-                          labelText: '함께하기 시작한 날',
-                          labelStyle: TextStyle(color: Colors.black38),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15.0)),
-                            borderSide:
-                                BorderSide(width: 1, color: Color(0xFF4CACA8)),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15.0)),
-                            borderSide:
-                                BorderSide(width: 1, color: Color(0xFF4CACA8)),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15.0)),
-                          ),
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                    ),
                   ),
                 ),
               ),
@@ -180,12 +119,12 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         borderSide:
-                            BorderSide(width: 1, color: Color(0xFF4CACA8)),
+                        BorderSide(width: 1, color: Color(0xFF4CACA8)),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)),
                         borderSide:
-                            BorderSide(width: 1, color: Color(0xFF4CACA8)),
+                        BorderSide(width: 1, color: Color(0xFF4CACA8)),
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)),
@@ -221,46 +160,6 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class SelectImageDialog extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(
-        '반려식물 사진 추가',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 22.0,
-          color: Color(0xFF025248),
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      titlePadding: EdgeInsets.fromLTRB(8.0,30.0,8.0,8.0),
-      content: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          IconButton(
-            onPressed: () {
-              //카메라로 전환
-            },
-            icon: Icon(Icons.photo_camera),
-            iconSize: 50,
-            color: Color(0xFF4CACA8),
-          ),
-          SizedBox(width: 40), //사이에 박스를 추가해서 아이콘 간격 조절
-          IconButton(
-            onPressed: () {
-              //갤러리로 전환
-            },
-            icon: Icon(Icons.wallpaper),
-            iconSize: 50,
-            color: Color(0xFF4CACA8),
-          ),
-        ],
       ),
     );
   }
