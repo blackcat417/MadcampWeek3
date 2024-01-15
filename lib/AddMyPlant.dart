@@ -14,6 +14,23 @@ class AddMyPlantScreen extends StatefulWidget {
 }
 
 class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
+  DateTime selectedDate = DateTime.now();
+  TextEditingController _dateController = TextEditingController();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+        _dateController.text = "${picked.toLocal()}".split(' ')[0];
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -78,7 +95,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 
               Positioned(
                 right: (screenWidth - 300) / 2,
-                top: 300.0,
+                top: 280.0,
                 child: SizedBox(
                   width: 300,
                   child: TextField(
@@ -106,35 +123,43 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 
               Positioned(
                 right: (screenWidth - 300) / 2,
-                top: 400.0,
+                top: 360.0,
                 child: SizedBox(
                   width: 300,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      labelText: '함께하기 시작한 날',
-                      labelStyle: TextStyle(color: Colors.black38),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        borderSide:
-                        BorderSide(width: 1, color: Color(0xFF4CACA8)),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        borderSide:
-                        BorderSide(width: 1, color: Color(0xFF4CACA8)),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                  child: InkWell(
+                    onTap: () {
+                      _selectDate(context);
+                    },
+                    child: AbsorbPointer(
+                      child: TextField(
+                        controller: _dateController,
+                        decoration: InputDecoration(
+                          labelText: '함께하기 시작한 날',
+                          labelStyle: TextStyle(color: Colors.black38),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderSide:
+                            BorderSide(width: 1, color: Color(0xFF4CACA8)),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            borderSide:
+                            BorderSide(width: 1, color: Color(0xFF4CACA8)),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                          ),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
                       ),
                     ),
-                    keyboardType: TextInputType.emailAddress,
                   ),
                 ),
               ),
 
               Positioned(
                 right: (screenWidth - 300) / 2,
-                top: 500.0,
+                top: 440.0,
                 child: SizedBox(
                   width: 300,
                   child: TextField(
@@ -161,9 +186,9 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
               ),
 
               Positioned(
-                right: 50.0,
-                top: 600.0,
-                left: 50.0,
+                right: (screenWidth - 300) / 2,
+                top: 520.0,
+                width: 300,
                 child: MaterialButton(
                   onPressed: () {
                     //데이터가 다 들어가있다면, 맞다면 나의 반려식물 데이터 post하기
