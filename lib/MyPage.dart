@@ -9,12 +9,25 @@ class MyPageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color(0xFFEBF3F5),
+        title: Center(
+          child: Text(
+            'MY PAGE',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF4CACA8),
+              fontSize: 27.0,
+            ),
+          ),
+        ),
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: [
           // Background image
           Image.asset(
-            'assets/planit_basicbackground_size.png',
+            'assets/planit_nologo_background.png',
             fit: BoxFit.cover,
           ),
 
