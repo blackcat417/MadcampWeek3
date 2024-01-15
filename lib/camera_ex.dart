@@ -28,8 +28,8 @@ class _CameraExampleState extends State<CameraExample> {
   // 모델과 label.txt를 가져온다.
   loadModel() async {
     await Tflite.loadModel(
-      model: "assets/model_unquant.tflite",
-      labels: "assets/testlabel.txt",
+      model: "lite-model_aiy_vision_classifier_plants_V1_3.tflite",
+      labels: "plant_labels.txt",
     ).then((value) {
       setState(() {
         //_loading = false;
@@ -50,7 +50,7 @@ class _CameraExampleState extends State<CameraExample> {
   // 이미지 분류
   Future classifyImage(File image) async {
     try {
-      print("Image Path: $image");
+      print("Image Path: ${image.path}");
       var output = await Tflite.runModelOnImage(
         path: image.path,
         imageMean: 0.0,
