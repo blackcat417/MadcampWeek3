@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'EmailLogin.dart';
+import 'main.dart';
 
 //Splash 화면 관련 선언
 class SplashScreen extends StatefulWidget {
@@ -71,6 +72,10 @@ class _MainLoginState extends State<MainLoginScreen> {
             child: MaterialButton(
               onPressed: () {
                 //!!!!!!!!!!!!클릭시 카카오 로그인을 하는 기능 추가 필요!!!!!!!!!!!!!
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Main()),
+                );
               },
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),
