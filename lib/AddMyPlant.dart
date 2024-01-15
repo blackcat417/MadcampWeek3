@@ -23,6 +23,41 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
   final TextEditingController nicknameController = TextEditingController();
   final TextEditingController memoController = TextEditingController();
 
+  void checkPlantTypeToast() {
+    Fluttertoast.showToast(
+      msg: '식물의 종을 입력해주세요',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.white70,
+      textColor: Color(0xFF4CACA8),
+      fontSize: 16.0,
+    );
+  }
+
+  void checkNicknameToast() {
+    Fluttertoast.showToast(
+      msg: '반려식물의 애칭을 입력해주세요',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.white70,
+      textColor: Color(0xFF4CACA8),
+      fontSize: 16.0,
+    );
+  }
+
+  void checkDateToast() {
+    Fluttertoast.showToast(
+      msg: '함께하기 시작한 날을 입력해주세요',
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.white70,
+      textColor: Color(0xFF4CACA8),
+      fontSize: 16.0,
+    );
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -40,10 +75,13 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
   }
 
   Future<void> addPlant() async {
-    try{
-      print('${await UserAuthManager.getUserId().toString()},${await UserAuthManager.getUserId().toString().runtimeType}');
-      print('${plantTypeController.text},${plantTypeController.text.runtimeType}');
-      print('${nicknameController.text},${nicknameController.text.runtimeType}');
+    try {
+      print(
+          '${await UserAuthManager.getUserId().toString()},${await UserAuthManager.getUserId().toString().runtimeType}');
+      print(
+          '${plantTypeController.text},${plantTypeController.text.runtimeType}');
+      print(
+          '${nicknameController.text},${nicknameController.text.runtimeType}');
       print('${dateController.text},${dateController.text.runtimeType}');
       print('${memoController.text},${memoController.text.runtimeType}');
 
@@ -53,12 +91,12 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
           'Content-Type': 'application/json',
         },
         body: jsonEncode(<String, dynamic>{
-          'UserId' : await UserAuthManager.getUserId(),
+          'UserId': await UserAuthManager.getUserId(),
           'imageUrl': 'imageUrl',
           'plantType': plantTypeController.text,
-          'nickname' : nicknameController.text,
-          'date' : dateController.text,
-          'memo' : memoController.text,
+          'nickname': nicknameController.text,
+          'date': dateController.text,
+          'memo': memoController.text,
         }),
       );
       print(response.body);
@@ -71,12 +109,10 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
       } else {
         print('Failed to register plant. Error: ${response.statusCode}');
       }
-    } catch (error){
+    } catch (error) {
       print('Error adding plant: $error');
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -99,27 +135,67 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
               Positioned(
                 right: (screenWidth - 300) / 2,
                 top: 130.0,
-                child: ElevatedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return SelectImageDialog();
-                      },
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Color(0xFF025248),
-                    fixedSize: Size(300, 50),
+                child: Container(
+                  width: 300.0,
+                  height: 150.0,
+                  decoration: BoxDecoration(
+                    image: const DecorationImage(
+                      image: AssetImage('assets/addplant_image.jpg'),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(15.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
-                  child: Icon(Icons.photo_camera,
-                      color: Colors.white), // 버튼 중앙에 표시할 아이콘
                 ),
               ),
 
               Positioned(
+                  right: 40,
+                  top: 230.0,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SelectImageDialog();
+                            },
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xFF025248),
+                          fixedSize: Size(30, 40),
+                        ),
+                        child: Container(), // 빈 컨테이너로 버튼 영역 확보
+                      ),
+                      Positioned(
+                        child: GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return SelectImageDialog();
+                              },
+                            );
+                          },
+                          child: Icon(Icons.photo_camera, color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  )),
+
+              Positioned(
                 right: (screenWidth - 300) / 2,
-                top: 200.0,
+                top: 290.0,
                 child: SizedBox(
                   width: 300,
                   child: TextField(
@@ -148,7 +224,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 
               Positioned(
                 right: (screenWidth - 300) / 2,
-                top: 280.0,
+                top: 370.0,
                 child: SizedBox(
                   width: 300,
                   child: TextField(
@@ -177,7 +253,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 
               Positioned(
                 right: (screenWidth - 300) / 2,
-                top: 360.0,
+                top: 450.0,
                 child: SizedBox(
                   width: 300,
                   child: InkWell(
@@ -216,7 +292,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 
               Positioned(
                 right: (screenWidth - 300) / 2,
-                top: 440.0,
+                top: 530.0,
                 child: SizedBox(
                   width: 300,
                   child: TextField(
@@ -245,13 +321,19 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 
               Positioned(
                 right: (screenWidth - 300) / 2,
-                top: 520.0,
+                top: 610.0,
                 width: 300,
                 child: MaterialButton(
                   onPressed: () {
-                    print('등록 완료 버튼 눌림');
-                    addPlant();
-                    //데이터가 다 들어가있다면, 맞다면 나의 반려식물 데이터 post하기
+                    if (plantTypeController.text == '') {
+                      checkPlantTypeToast();
+                    } else if (nicknameController.text == '') {
+                      checkNicknameToast();
+                    } else if (dateController.text == '') {
+                      checkDateToast();
+                    } else {
+                      addPlant();
+                    }
                   },
                   color: const Color(0xff169384),
                   shape: RoundedRectangleBorder(
@@ -288,7 +370,7 @@ class SelectImageDialog extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
-      titlePadding: EdgeInsets.fromLTRB(8.0,30.0,8.0,8.0),
+      titlePadding: EdgeInsets.fromLTRB(8.0, 30.0, 8.0, 8.0),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
