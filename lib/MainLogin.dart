@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> checkAndNavigate() async {
-    if (await UserAuthManager.getEmail()!=null) {
+    if (await UserAuthManager.getUserId()!=null) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => Main()),

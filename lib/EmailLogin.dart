@@ -18,7 +18,7 @@ class EmailLoginScreen extends StatefulWidget {
 }
 
 class _EmailLoginScreenState extends State<EmailLoginScreen> {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController UserIdController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -55,20 +55,20 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'Email': emailController.text,
+          'UserId': UserIdController.text,
           'password': passwordController.text,
         }),
       );
 
-      print(emailController.text);
+      print(UserIdController.text);
       print(passwordController.text);
       print(response.body);
       print(response.statusCode);
 
       if (response.statusCode == 200) {
         print('Login successful');
-        await UserAuthManager.saveEmail(emailController.text);
-        print('User ${await UserAuthManager.getEmail()} logged in.');
+        await UserAuthManager.saveUserId(UserIdController.text);
+        print('User ${await UserAuthManager.getUserId()} logged in.');
         loginToast();
         Navigator.push(
           context,
@@ -104,9 +104,9 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                 child: SizedBox(
                   width: 300,
                   child: TextField(
-                    controller: emailController,
+                    controller: UserIdController,
                     decoration: const InputDecoration(
-                      labelText: 'E-mail',
+                      labelText: 'ID',
                       labelStyle: TextStyle(color: Colors.black38),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)),
@@ -160,8 +160,6 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                 left: 50.0,
                 child: MaterialButton(
                   onPressed: () async {
-                    await UserAuthManager.saveEmail(emailController.text);
-                    print("로그인 정보 : ${UserAuthManager.getEmail()}");
                     login();
                   },
                   color: const Color(0xff169384),
