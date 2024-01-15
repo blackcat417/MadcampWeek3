@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:planit/MainLogin.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'Setting/Userauth.dart';
 import 'Signup.dart';
 import 'main.dart';
 
@@ -35,9 +36,21 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
       );
     }
 
+    void loginToast() {
+      Fluttertoast.showToast(
+        msg: '로그인 성공!',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white70,
+        textColor: Color(0xFF4CACA8),
+        fontSize: 16.0,
+      );
+    }
+
     Future<void> login() async {
       final response = await http.post(
-        Uri.parse('http://143.248.192.79:3000/login'), // 서버의 주소로 변경
+        Uri.parse('http://143.248.192.141:3000/login'), // 서버의 주소로 변경
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -54,6 +67,9 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
       if (response.statusCode == 200) {
         print('Login successful');
+        await UserAuthManager.saveEmail(emailController.text);
+        print('User ${await UserAuthManager.getEmail()} logged in.');
+        loginToast();
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Main()),
@@ -143,7 +159,9 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                 top: 410.0,
                 left: 50.0,
                 child: MaterialButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    await UserAuthManager.saveEmail(emailController.text);
+                    print("로그인 정보 : ${UserAuthManager.getEmail()}");
                     login();
                   },
                   color: const Color(0xff169384),

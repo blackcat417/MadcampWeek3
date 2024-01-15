@@ -54,7 +54,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
               Positioned(
                 right: (screenWidth - 300) / 2,
                 top: 200.0,
-                child: SizedBox(
+                child: const SizedBox(
                   width: 300,
                   child: TextField(
                     decoration: InputDecoration(
@@ -82,7 +82,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
               Positioned(
                 right: (screenWidth - 300) / 2,
                 top: 280.0,
-                child: SizedBox(
+                child: const SizedBox(
                   width: 300,
                   child: TextField(
                     decoration: InputDecoration(
@@ -110,7 +110,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
               Positioned(
                 right: (screenWidth - 300) / 2,
                 top: 440.0,
-                child: SizedBox(
+                child: const SizedBox(
                   width: 300,
                   child: TextField(
                     decoration: InputDecoration(

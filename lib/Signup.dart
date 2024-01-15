@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:planit/EmailLogin.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'Setting/Userauth.dart';
+import 'main.dart';
 
 
 //Signup 화면 관련 선언
@@ -46,9 +48,21 @@ class _SignupScreenState extends State<SignupScreen> {
       );
     }
 
+    void signupToast() {
+      Fluttertoast.showToast(
+        msg: '회원가입 완료',
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.white70,
+        textColor: Color(0xFF4CACA8),
+        fontSize: 16.0,
+      );
+    }
+
     Future<void> signup() async {
       final response = await http.post(
-        Uri.parse('http://143.248.192.79:3000/signup'), // 서버의 주소로 변경
+        Uri.parse('http://143.248.192.141:3000/signup'), // 서버의 주소로 변경
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -61,6 +75,13 @@ class _SignupScreenState extends State<SignupScreen> {
 
       if (response.statusCode == 200) {
         print('Signup successful');
+        await UserAuthManager.saveEmail(emailController.text);
+        print('User ${await UserAuthManager.getEmail()} logged in.');
+        signupToast();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Main()),
+        );
       } else if (response.statusCode == 400) {
         print('유저 이미 존재');
         checkEmailToast();

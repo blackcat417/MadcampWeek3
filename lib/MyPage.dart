@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:planit/Setting/UserAuth.dart';
+
+import 'MainLogin.dart';
 
 class MyPageScreen extends StatelessWidget {
   const MyPageScreen({Key? key}) : super(key: key);
@@ -20,9 +23,13 @@ class MyPageScreen extends StatelessWidget {
             bottom: 50.0,
             child: ElevatedButton(
               onPressed: () {
-                // Handle button press
+                UserAuthManager.logout();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MainLoginScreen()),
+                );
               },
-              child: Text('Mypage'),
+              child: Text('Logout'),
             ),
           ),
         ],

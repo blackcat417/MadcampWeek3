@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:planit/Setting/Userauth.dart';
 import 'package:planit/camera_ex.dart';
 import 'EmailLogin.dart';
 import 'main.dart';
@@ -19,11 +20,22 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Timer(
       const Duration(seconds: 3), // 3초 후에 MainLogin 화면으로 전환
-          () => Navigator.pushReplacement(
+      () => checkAndNavigate(),
+    );
+  }
+
+  Future<void> checkAndNavigate() async {
+    if (await UserAuthManager.getEmail()!=null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Main()),
+      );
+    } else {
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const MainLoginScreen()),
-      ),
-    );
+      );
+    }
   }
 
   @override
@@ -52,7 +64,7 @@ class MainLoginScreen extends StatefulWidget {
 
 class _MainLoginState extends State<MainLoginScreen> {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
@@ -71,10 +83,12 @@ class _MainLoginState extends State<MainLoginScreen> {
             top: 65.0,
             left: 50.0,
             child: TextButton(
-              onPressed: () {//버튼 클릭 시 EmailLogin 화면으로 이동
+              onPressed: () {
+                //버튼 클릭 시 EmailLogin 화면으로 이동
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const CameraExample()),
+                  MaterialPageRoute(
+                      builder: (context) => const CameraExample()),
                 );
               },
               style: TextButton.styleFrom(
@@ -107,16 +121,17 @@ class _MainLoginState extends State<MainLoginScreen> {
             ),
           ),
 
-
           Positioned(
             right: 50.0,
             bottom: 65.0,
             left: 50.0,
             child: TextButton(
-              onPressed: () {//버튼 클릭 시 EmailLogin 화면으로 이동
+              onPressed: () {
+                //버튼 클릭 시 EmailLogin 화면으로 이동
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const EmailLoginScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const EmailLoginScreen()),
                 );
               },
               style: TextButton.styleFrom(
@@ -134,3 +149,4 @@ class _MainLoginState extends State<MainLoginScreen> {
     );
   }
 }
+
