@@ -202,6 +202,8 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                 width: 300,
                 child: MaterialButton(
                   onPressed: () {
+                    print('등록 완료 버튼 눌림');
+                    addPlant();
                     //데이터가 다 들어가있다면, 맞다면 나의 반려식물 데이터 post하기
                   },
                   color: const Color(0xff169384),
@@ -263,5 +265,60 @@ class SelectImageDialog extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+
+/*void registerNewPlant(String Email,String imageUrl,String plantType, String nickname, String date, String memo) async {
+  final apiUrl = 'http://143.248.192.141:3000/addPlant';
+
+  Map<String, String> data = {
+    'Email': plantType,
+    'imageUrl': imageUrl,
+    'plantType': plantType,
+    'nickname': nickname,
+    'date': date,
+    'memo': memo,
+  };
+
+  try {
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+
+    if (response.statusCode == 200) {
+      print('Plant registered successfully!');
+    } else {
+      print('Failed to register plant. Error: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error: $e');
+  }
+}*/
+Future<void> addPlant() async {
+  final response = await http.post(
+    Uri.parse('http://143.248.192.141:3000/addPlant'), // 서버의 주소로 변경
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({
+      'imageUrl': 'imageUrl',
+      'plantType': 'plantType',
+      'nickname' : 'nickname',
+      'date' : 'date',
+      'memo' : 'memo',
+    }),
+  );
+  print(response.body);
+  print(response.statusCode);
+
+  if (response.statusCode == 200) {
+    print('Plant registered successfully!');
+  } else if (response.statusCode == 401) {
+    print('잘못된 로그인');
+  } else {
+    print('Failed to register plant. Error: ${response.statusCode}');
   }
 }
