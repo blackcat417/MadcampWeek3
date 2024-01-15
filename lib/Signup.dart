@@ -18,15 +18,15 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController UserIdController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController checkPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
 
-    void checkEmailToast() {
+    void checkUserIdToast() {
       Fluttertoast.showToast(
-        msg: '이미 존재하는 E-mail입니다',
+        msg: '이미 존재하는 ID입니다',
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
@@ -67,7 +67,7 @@ class _SignupScreenState extends State<SignupScreen> {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'Email': emailController.text,
+          'UserId': UserIdController.text,
           'password': passwordController.text,
           'checkPassword': checkPasswordController.text,
         }),
@@ -75,8 +75,8 @@ class _SignupScreenState extends State<SignupScreen> {
 
       if (response.statusCode == 200) {
         print('Signup successful');
-        await UserAuthManager.saveEmail(emailController.text);
-        print('User ${await UserAuthManager.getEmail()} logged in.');
+        await UserAuthManager.saveUserId(UserIdController.text);
+        print('User ${await UserAuthManager.getUserId()} logged in.');
         signupToast();
         Navigator.push(
           context,
@@ -84,9 +84,9 @@ class _SignupScreenState extends State<SignupScreen> {
         );
       } else if (response.statusCode == 400) {
         print('유저 이미 존재');
-        checkEmailToast();
+        checkUserIdToast();
       } else {
-        print('Signup failed');
+        print('Signup failed ${response.statusCode}');
       }
     }
 
@@ -112,9 +112,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: SizedBox(
                   width: 300,
                   child: TextField(
-                    controller: emailController,
+                    controller: UserIdController,
                     decoration: InputDecoration(
-                      labelText: 'E-mail',
+                      labelText: 'ID',
                       labelStyle: TextStyle(color: Colors.black38),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(15.0)),

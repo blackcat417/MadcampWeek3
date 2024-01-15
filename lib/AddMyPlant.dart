@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:planit/EmailLogin.dart';
+import 'package:planit/Setting/UserAuth.dart';
 import 'package:planit/camera_ex.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
@@ -17,7 +18,11 @@ class AddMyPlantScreen extends StatefulWidget {
 
 class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
   DateTime selectedDate = DateTime.now();
-  TextEditingController _dateController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController plantTypeController = TextEditingController();
+  final TextEditingController nicknameController = TextEditingController();
+  final TextEditingController memoController = TextEditingController();
+
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -29,10 +34,49 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        _dateController.text = "${picked.toLocal()}".split(' ')[0];
+        dateController.text = "${picked.toLocal()}".split(' ')[0];
       });
     }
   }
+
+  Future<void> addPlant() async {
+    try{
+      print('${await UserAuthManager.getUserId().toString()},${await UserAuthManager.getUserId().toString().runtimeType}');
+      print('${plantTypeController.text},${plantTypeController.text.runtimeType}');
+      print('${nicknameController.text},${nicknameController.text.runtimeType}');
+      print('${dateController.text},${dateController.text.runtimeType}');
+      print('${memoController.text},${memoController.text.runtimeType}');
+
+      final response = await http.post(
+        Uri.parse('http://143.248.192.141:3000/addPlant'), // 서버의 주소로 변경
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'UserId' : await UserAuthManager.getUserId(),
+          'imageUrl': 'imageUrl',
+          'plantType': plantTypeController.text,
+          'nickname' : nicknameController.text,
+          'date' : dateController.text,
+          'memo' : memoController.text,
+        }),
+      );
+      print(response.body);
+      print(response.statusCode);
+
+      if (response.statusCode == 200) {
+        print('Plant registered successfully!');
+      } else if (response.statusCode == 401) {
+        print('');
+      } else {
+        print('Failed to register plant. Error: ${response.statusCode}');
+      }
+    } catch (error){
+      print('Error adding plant: $error');
+    }
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +123,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                 child: SizedBox(
                   width: 300,
                   child: TextField(
+                    controller: plantTypeController,
                     decoration: InputDecoration(
                       labelText: '식물 종',
                       labelStyle: TextStyle(color: Colors.black38),
@@ -107,6 +152,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                 child: SizedBox(
                   width: 300,
                   child: TextField(
+                    controller: nicknameController,
                     decoration: InputDecoration(
                       labelText: '반려식물 애칭',
                       labelStyle: TextStyle(color: Colors.black38),
@@ -140,7 +186,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                     },
                     child: AbsorbPointer(
                       child: TextField(
-                        controller: _dateController,
+                        controller: dateController,
                         decoration: InputDecoration(
                           labelText: '함께하기 시작한 날',
                           labelStyle: TextStyle(color: Colors.black38),
@@ -174,6 +220,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                 child: SizedBox(
                   width: 300,
                   child: TextField(
+                    controller: memoController,
                     decoration: InputDecoration(
                       labelText: '메모',
                       labelStyle: TextStyle(color: Colors.black38),
@@ -265,60 +312,5 @@ class SelectImageDialog extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-
-/*void registerNewPlant(String Email,String imageUrl,String plantType, String nickname, String date, String memo) async {
-  final apiUrl = 'http://143.248.192.141:3000/addPlant';
-
-  Map<String, String> data = {
-    'Email': plantType,
-    'imageUrl': imageUrl,
-    'plantType': plantType,
-    'nickname': nickname,
-    'date': date,
-    'memo': memo,
-  };
-
-  try {
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(data),
-    );
-
-    if (response.statusCode == 200) {
-      print('Plant registered successfully!');
-    } else {
-      print('Failed to register plant. Error: ${response.statusCode}');
-    }
-  } catch (e) {
-    print('Error: $e');
-  }
-}*/
-Future<void> addPlant() async {
-  final response = await http.post(
-    Uri.parse('http://143.248.192.141:3000/addPlant'), // 서버의 주소로 변경
-    headers: <String, String>{
-      'Content-Type': 'application/json',
-    },
-    body: jsonEncode({
-      'imageUrl': 'imageUrl',
-      'plantType': 'plantType',
-      'nickname' : 'nickname',
-      'date' : 'date',
-      'memo' : 'memo',
-    }),
-  );
-  print(response.body);
-  print(response.statusCode);
-
-  if (response.statusCode == 200) {
-    print('Plant registered successfully!');
-  } else if (response.statusCode == 401) {
-    print('잘못된 로그인');
-  } else {
-    print('Failed to register plant. Error: ${response.statusCode}');
   }
 }
