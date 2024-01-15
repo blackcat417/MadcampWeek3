@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:planit/AddMyPlant.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -24,7 +25,10 @@ class HomeScreen extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 // 클릭될 때 수행할 동작
-                print("이미지 버튼 클릭됐어용");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddMyPlantScreen()),
+                );
               },
               child: Container(
                 width: 300.0,
