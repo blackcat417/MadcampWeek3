@@ -11,15 +11,15 @@ void main() {
   runApp(const MyApp()); //앱 실행 명령어, 앱의 메인페이지를 적어주면 됨
 }
 
-class MyApp extends StatelessWidget { //앱의 메인페이지 만드는 법
+class MyApp extends StatelessWidget {
+  //앱의 메인페이지 만드는 법
   const MyApp({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context){
 
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       home: SplashScreen(),
     );
-
   }
 }
 
@@ -39,8 +39,8 @@ class _MainState extends State<Main> {
     HomeScreen(),
     TodoScreen(),
     MyPageScreen(),
-    //CommunityScreen(),
-    //MarketScreen(),
+    CommunityScreen(),
+    MarketScreen(),
   ];
 
   // 탭 선택 시 호출될 함수
@@ -53,9 +53,9 @@ class _MainState extends State<Main> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
+        body: _screens[_selectedIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -67,21 +67,23 @@ class _MainState extends State<Main> {
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'My',
-          /*BottomNavigationBarItem(
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.people),
             label: 'Community',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: 'Market',
-          ),*/
           ),
         ],
-        currentIndex: _selectedIndex,
-        unselectedItemColor: const Color(0xFFEBD9C1),
-        selectedItemColor: const Color(0xFF4CACA8),
-        onTap: _onItemTapped,
-      ),
+    currentIndex: _selectedIndex,
+    unselectedItemColor: const Color(0xFFEBD9C1),
+    selectedItemColor: const Color(0xFF4CACA8),
+    onTap: _onItemTapped
+    ,
+    )
+    ,
     );
   }
 }
