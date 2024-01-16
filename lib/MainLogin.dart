@@ -66,6 +66,7 @@ class _MainLoginState extends State<MainLoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
+        fit: StackFit.expand,
         children: [
           // 배경화면
           Container(
@@ -79,7 +80,7 @@ class _MainLoginState extends State<MainLoginScreen> {
 
           Positioned(
             right: 50.0,
-            bottom: 115.0,
+            bottom: 180.0,
             left: 50.0,
             child: MaterialButton(
               onPressed: () {
@@ -98,7 +99,7 @@ class _MainLoginState extends State<MainLoginScreen> {
 
           Positioned(
             right: 50.0,
-            bottom: 65.0,
+            bottom: 130.0,
             left: 50.0,
             child: TextButton(
               onPressed: () {
@@ -112,7 +113,7 @@ class _MainLoginState extends State<MainLoginScreen> {
               style: TextButton.styleFrom(
                 primary: Colors.white,
                 textStyle: const TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 25.0,
                 ),
                 backgroundColor: Colors.transparent,
               ),

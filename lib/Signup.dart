@@ -107,7 +107,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
               Positioned(
                 left: 50.0,
-                top: 250.0,
+                top: 300.0,
                 right: 50.0,
                 child: SizedBox(
                   width: 300,
@@ -135,7 +135,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
               Positioned(
                 left: 50.0,
-                top: 330.0,
+                top: 370.0,
                 right: 50.0,
                 child: SizedBox(
                   width: 300,
@@ -165,7 +165,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
               Positioned(
                 left: 50.0,
-                top: 410.0,
+                top: 440.0,
                 right: 50.0,
                 child: SizedBox(
                   width: 300,
@@ -194,7 +194,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
               Positioned(
                 right: 50.0,
-                top: 482.0,
+                top: 540.0,
                 left: 50.0,
                 child: MaterialButton(
                   onPressed: () {
@@ -221,7 +221,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
               Positioned(
                 right: 50.0,
-                top: 540.0,
+                top: 610.0,
                 left: 50.0,
                 child: MaterialButton(
                   onPressed: () {
@@ -234,7 +234,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  height: 48.0,
+                  height: 50.0,
                   child: const Text(
                     '이전 화면으로 돌아가기',
                     style: TextStyle(

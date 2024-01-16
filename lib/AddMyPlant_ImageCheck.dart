@@ -30,7 +30,7 @@ class ImageCheckScreen extends StatelessWidget {
 
           Positioned(
             right: (screenWidth - 300) / 2,
-            top: 140.0,
+            top: 220.0,
             child: Container(
               width: 300.0,
               height: 250.0,
@@ -38,11 +38,11 @@ class ImageCheckScreen extends StatelessWidget {
                 image: _imageFile != null
                     ? DecorationImage(
                         image: FileImage(_imageFile!), // File에서 Image를 생성
-                        fit: BoxFit.cover,
+                        fit: BoxFit.scaleDown,
                       )
                     : const DecorationImage(
                         image: AssetImage('assets/addplant_image.jpg'),
-                        fit: BoxFit.cover,
+                        fit: BoxFit.scaleDown,
                       ),
                 borderRadius: BorderRadius.circular(15.0),
                 boxShadow: [
@@ -60,7 +60,7 @@ class ImageCheckScreen extends StatelessWidget {
           Positioned(
             right: (screenWidth - 300) / 2,
             left: (screenWidth - 300) / 2,
-            top: 410.0,
+            top: 520.0,
             child: Text(
               '지금 등록하려는 반려식물은',
               style: TextStyle(
@@ -75,7 +75,7 @@ class ImageCheckScreen extends StatelessWidget {
           Positioned(
             right: (screenWidth - 300) / 2,
             left: (screenWidth - 300) / 2,
-            top: 440.0,
+            top: 550.0,
             child: Text(
               '[ ${guessPlantType} ]',
               style: TextStyle(
@@ -90,7 +90,7 @@ class ImageCheckScreen extends StatelessWidget {
           Positioned(
             right: (screenWidth - 300) / 2,
             left: (screenWidth - 300) / 2,
-            top: 505.0,
+            top: 605.0,
             child: Text(
               '해당 결과가 정확한가요?',
               style: TextStyle(
@@ -104,7 +104,7 @@ class ImageCheckScreen extends StatelessWidget {
 
           Positioned(
             left: (screenWidth - 300) / 2,
-            top: 550.0,
+            top: 650.0,
             width: 140,
             child: MaterialButton(
               onPressed: () async {
@@ -135,7 +135,7 @@ class ImageCheckScreen extends StatelessWidget {
 
           Positioned(
             right: (screenWidth - 300) / 2,
-            top: 550.0,
+            top: 650.0,
             width: 140,
             child: MaterialButton(
               onPressed: () async {

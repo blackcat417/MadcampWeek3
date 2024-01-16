@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
 
           Positioned(
             right: (screenWidth - 300) / 2,
-            top: 130.0,
+            top: 200.0,
             child: GestureDetector(
               onTap: () {
                 // 클릭될 때 수행할 동작
@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
               },
               child: Container(
                 width: 300.0,
-                height: 180.0,
+                height: 220.0,
                 decoration: BoxDecoration(
                   image: const DecorationImage(
                     image: AssetImage('assets/addplant_image.jpg'),
@@ -64,7 +64,7 @@ class HomeScreen extends StatelessWidget {
                         '반려식물 등록하기',
                         style: TextStyle(
                           color: Color(0xFF025248),
-                          fontSize: 21.0,
+                          fontSize: 24.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -76,13 +76,13 @@ class HomeScreen extends StatelessWidget {
           ),
 
           Positioned(
-            left: screenWidth * 0.09,
-            top: 330.0,
+            left: screenWidth * 0.13,
+            top: 440.0,
             child: const Text(
               '나의 반려식물들',
               style: TextStyle(
                 color: Color(0xFF4CACA8),
-                fontSize: 18.0,
+                fontSize: 24.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -90,10 +90,10 @@ class HomeScreen extends StatelessWidget {
 
           Positioned(
             right: (screenWidth - 300) / 2,
-            top: 360.0,
+            top: 480.0,
             child: SizedBox(
               width: 305,
-              height: 210,
+              height: 230,
               child: FutureBuilder<List<MyPlant>>(
                 future: getUserPlants(),
                 builder: (context, snapshot) {
@@ -226,12 +226,12 @@ class MyPlantsGrid extends StatelessWidget {
                   Text(myPlant.date,
                       style: TextStyle(
                           color: Color(0xFF0D7064),
-                          fontSize: 13.0,
+                          fontSize: 16.0,
                           fontWeight: FontWeight.bold)),
                   Text(myPlant.nickname,
                       style: TextStyle(
                           color: Color(0xFF025248),
-                          fontSize: 21.0,
+                          fontSize: 24.0,
                           fontWeight: FontWeight.bold)),
                 ],
               ),

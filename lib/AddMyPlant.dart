@@ -158,16 +158,16 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 
               Positioned(
                 right: (screenWidth - 300) / 2,
-                top: 130.0,
+                top: 180.0,
                 child: Container(
                   width: 300.0,
-                  height: 150.0,
+                  height: 230.0,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: imageFile != null
                           ? FileImage(imageFile!) as ImageProvider<Object>
                           : AssetImage('assets/addplant_image.jpg'),
-                      fit: BoxFit.cover,
+                      fit: BoxFit.scaleDown,
                     ),
                     borderRadius: BorderRadius.circular(15.0),
                     boxShadow: [
@@ -183,8 +183,8 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
               ),
 
               Positioned(
-                  right: 40,
-                  top: 230.0,
+                  right: 60,
+                  top: 350.0,
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
@@ -237,7 +237,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 
               Positioned(
                 right: (screenWidth - 300) / 2,
-                top: 290.0,
+                top: 440.0,
                 child: SizedBox(
                   width: 300,
                   child: TextField(
@@ -266,7 +266,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 
               Positioned(
                 right: (screenWidth - 300) / 2,
-                top: 370.0,
+                top: 520.0,
                 child: SizedBox(
                   width: 300,
                   child: TextField(
@@ -295,7 +295,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 
               Positioned(
                 right: (screenWidth - 300) / 2,
-                top: 450.0,
+                top: 600.0,
                 child: SizedBox(
                   width: 300,
                   child: InkWell(
@@ -334,7 +334,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 
               Positioned(
                 right: (screenWidth - 300) / 2,
-                top: 530.0,
+                top: 680.0,
                 child: SizedBox(
                   width: 300,
                   child: TextField(
@@ -363,7 +363,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 
               Positioned(
                 right: (screenWidth - 300) / 2,
-                top: 610.0,
+                top: 760.0,
                 width: 300,
                 child: MaterialButton(
                   onPressed: () {

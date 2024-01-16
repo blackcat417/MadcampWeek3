@@ -106,7 +106,7 @@ class _MyPlantDetailsScreenState extends State<MyPlantDetailsScreen> {
           Align(
             alignment: Alignment.center,
             child: Container(
-              margin: EdgeInsets.only(bottom: 280.0),
+              margin: EdgeInsets.only(bottom: 400.0),
               width: 160,
               height: 160,
               decoration: BoxDecoration(
@@ -132,7 +132,7 @@ class _MyPlantDetailsScreenState extends State<MyPlantDetailsScreen> {
           Align(
             alignment: Alignment.center,
             child: Container(
-              margin: EdgeInsets.only(left:130.0,bottom: 170.0),
+              margin: EdgeInsets.only(left:130.0,bottom: 290.0),
               width: 70,
               height: 50,
               child: MaterialButton(
@@ -152,7 +152,7 @@ class _MyPlantDetailsScreenState extends State<MyPlantDetailsScreen> {
           Align(
             alignment: Alignment.center,
             child: Container(
-              margin: EdgeInsets.only(bottom: 20.0),
+              margin: EdgeInsets.only(bottom: 130.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center, // 수평 정렬을 중앙으로 설정
                 crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -162,7 +162,7 @@ class _MyPlantDetailsScreenState extends State<MyPlantDetailsScreen> {
                     '${widget.myPlant.nickname}',
                     style: TextStyle(
                       color: Color(0xFF4CACA8),
-                      fontSize: 30.0,
+                      fontSize: 50.0,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
@@ -172,7 +172,7 @@ class _MyPlantDetailsScreenState extends State<MyPlantDetailsScreen> {
                     '${widget.myPlant.plantType}',
                     style: TextStyle(
                       color: Color(0xFF74B9B5),
-                      fontSize: 20.0,
+                      fontSize: 25.0,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
@@ -185,13 +185,13 @@ class _MyPlantDetailsScreenState extends State<MyPlantDetailsScreen> {
 
           Align(
             alignment: Alignment.center,
-            child: Container(
-              margin: EdgeInsets.only(top: 60.0), // 위로 조절하는 부분
+            child: Container( // 위로 조절하는 부분
+              margin: EdgeInsets.only(bottom: 40.0),
               child: Text(
                 '함께하기 시작한 날 ${widget.myPlant.date}',
                 style: TextStyle(
                   color: Color(0xFF74B9B5),
-                  fontSize: 18.0,
+                  fontSize: 22.0,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
@@ -202,10 +202,10 @@ class _MyPlantDetailsScreenState extends State<MyPlantDetailsScreen> {
           Align(
             alignment: Alignment.center,
             child: Container(
-              margin: EdgeInsets.only(top: 300.0), // 위로 조절하는 부분
+              margin: EdgeInsets.only(top: 420.0), // 위로 조절하는 부분
               child: SizedBox(
                 width: 305,
-                height: 210,
+                height: 400,
                 child: MyPlantsDetailGrid(galleryImages: galleryImages),
               ),
             ),
