@@ -92,7 +92,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
         },
         body: jsonEncode(<String, dynamic>{
           'UserId': await UserAuthManager.getUserId(),
-          'imageUrl': 'imageUrl',
+          'imageUrl': 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Nelumno_nucifera_open_flower_-_botanic_garden_adelaide2.jpg',
           'plantType': plantTypeController.text,
           'nickname': nicknameController.text,
           'date': dateController.text,
