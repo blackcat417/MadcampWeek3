@@ -38,9 +38,9 @@ class _MainState extends State<Main> {
   final List<Widget> _screens = [
     HomeScreen(),
     TodoScreen(),
-    CommunityScreen(),
-    MarketScreen(),
     MyPageScreen(),
+    //CommunityScreen(),
+    //MarketScreen(),
   ];
 
   // 탭 선택 시 호출될 함수
@@ -65,16 +65,16 @@ class _MainState extends State<Main> {
             label: 'To Do',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'My',
+          /*BottomNavigationBarItem(
             icon: Icon(Icons.people),
             label: 'Community',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: 'Market',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'My',
+          ),*/
           ),
         ],
         currentIndex: _selectedIndex,

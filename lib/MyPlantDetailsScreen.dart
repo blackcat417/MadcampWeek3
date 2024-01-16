@@ -132,14 +132,20 @@ class _MyPlantDetailsScreenState extends State<MyPlantDetailsScreen> {
           Align(
             alignment: Alignment.center,
             child: Container(
-              margin: EdgeInsets.only(bottom: 280.0),
-              width: 50,
+              margin: EdgeInsets.only(left:130.0,bottom: 170.0),
+              width: 70,
               height: 50,
-              child: IconButton(
-                icon: Icon(Icons.photo_camera),
+              child: MaterialButton(
                 onPressed: () {
                   _takePicture();
-                },)
+                },
+                color: Color(0xFF025248), // 버튼의 배경색을 원하는 색상으로 설정
+                shape: CircleBorder(), // 버튼을 원형으로 만들기 위해 추가
+                child: Icon(
+                  Icons.photo_camera,
+                  color: Colors.white, // 아이콘 색상을 원하는 색상으로 설정
+                ),
+              ),
             ),
           ),
 
@@ -238,6 +244,10 @@ class MyPlantsDetailGrid extends StatelessWidget {
       width: 90,
       height: 90,
       decoration: BoxDecoration(
+        border: Border.all(
+          color: Color(0xFF74B9B5), // 테두리 색상을 원하는 색상으로 수정
+          width: 1.5, // 테두리의 두께를 원하는 크기로 수정
+        ),
         image: DecorationImage(
           image: FileImage(File(imageUrl)),
           fit: BoxFit.cover,

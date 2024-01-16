@@ -60,9 +60,44 @@ class ImageCheckScreen extends StatelessWidget {
           Positioned(
             right: (screenWidth - 300) / 2,
             left: (screenWidth - 300) / 2,
-            top: 500.0,
+            top: 410.0,
             child: Text(
-              '${guessPlantType}',
+              '지금 등록하려는 반려식물은',
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Color(0xff4dafac),
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+
+          Positioned(
+            right: (screenWidth - 300) / 2,
+            left: (screenWidth - 300) / 2,
+            top: 440.0,
+            child: Text(
+              '[ ${guessPlantType} ]',
+              style: TextStyle(
+                fontSize: 40.0,
+                color: Color(0xFF025248),
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+
+          Positioned(
+            right: (screenWidth - 300) / 2,
+            left: (screenWidth - 300) / 2,
+            top: 505.0,
+            child: Text(
+              '해당 결과가 정확한가요?',
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Color(0xff4dafac),
+                fontWeight: FontWeight.bold,
+              ),
               textAlign: TextAlign.center,
             ),
           ),

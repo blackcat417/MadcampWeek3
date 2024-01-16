@@ -408,7 +408,6 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 typedef ImageSelectedCallback = void Function(String updatedImageUrl, String guessPlantType);
 
 class SelectImageDialog extends StatelessWidget {
-  File? _image;
   List<dynamic>? _outputs;
 
   Future<void> classifyImage(File image) async {
