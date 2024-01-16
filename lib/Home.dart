@@ -117,7 +117,6 @@ class HomeScreen extends StatelessWidget {
   }
 
   Future<List<MyPlant>> getUserPlants() async {
-
     String? userId = await UserAuthManager.getUserId();
     final response = await http.get(
       Uri.parse('http://143.248.192.43:3000/userPlants/$userId'),
@@ -126,7 +125,6 @@ class HomeScreen extends StatelessWidget {
       },
     );
 
-
     if (response.statusCode == 200) {
       final List<dynamic> plantData = json.decode(response.body)['userPlants'];
       return plantData
@@ -134,6 +132,8 @@ class HomeScreen extends StatelessWidget {
                 item['nickname'],
                 item['date'],
                 item['imageUrl'],
+                item['plantType'],
+                item['memo'],
               ))
           .toList();
     } else {
@@ -146,8 +146,10 @@ class MyPlant {
   final String nickname;
   final String date;
   final String imageUrl;
+  final String plantType;
+  final String memo;
 
-  MyPlant(this.nickname, this.date, this.imageUrl);
+  MyPlant(this.nickname, this.date, this.imageUrl, this.plantType, this.memo);
 }
 
 class MyPlantsGrid extends StatelessWidget {
@@ -172,7 +174,8 @@ class MyPlantsGrid extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => MyPlantDetailsScreen(myPlant: myPlants[index]),
+                builder: (context) =>
+                    MyPlantDetailsScreen(myPlant: myPlants[index]),
               ),
             );
           },
