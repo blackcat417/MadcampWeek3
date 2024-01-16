@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:planit/Home.dart';
 import 'package:planit/Setting/UserAuth.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'AddMyPlant_ImageCheck.dart';
+import 'main.dart';
 
 class AddMyPlantScreen extends StatefulWidget {
   const AddMyPlantScreen({Key? key}) : super(key: key);
@@ -24,6 +26,8 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
   final TextEditingController nicknameController = TextEditingController();
   final TextEditingController memoController = TextEditingController();
   File? imageFile; // 현재 선택된 파일을 추적하기 위한 변수
+  late String saveUrl; // Add this line to store the updated image URL
+
 
   void checkPlantTypeToast() {
     Fluttertoast.showToast(
@@ -79,23 +83,23 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
   Future<void> addPlant() async {
     try {
       print(
-          '${await UserAuthManager.getUserId().toString()},${await UserAuthManager.getUserId().toString().runtimeType}');
+          '${await UserAuthManager.getUserId()}');
       print(
           '${plantTypeController.text},${plantTypeController.text.runtimeType}');
       print(
           '${nicknameController.text},${nicknameController.text.runtimeType}');
       print('${dateController.text},${dateController.text.runtimeType}');
       print('${memoController.text},${memoController.text.runtimeType}');
+      print('saveUrl = ${saveUrl}');// Store the updated image URL
 
       final response = await http.post(
-        Uri.parse('http://10.199.228.144:3000/addPlant'), // 서버의 주소로 변경
+        Uri.parse('http://143.248.192.43:3000/addPlant'), // 서버의 주소로 변경
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
         body: jsonEncode(<String, dynamic>{
           'UserId': await UserAuthManager.getUserId(),
-          'imageUrl':
-              'https://upload.wikimedia.org/wikipedia/commons/d/d3/Nelumno_nucifera_open_flower_-_botanic_garden_adelaide2.jpg',
+          'imageUrl': saveUrl,
           'plantType': plantTypeController.text,
           'nickname': nicknameController.text,
           'date': dateController.text,
@@ -174,7 +178,8 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                             builder: (BuildContext context) {
                               return SelectImageDialog(
                                 onImageSelected: (updatedImageUrl, guessPlantType) {
-                                  setState(() {
+                                  setState(() async {
+                                      saveUrl = updatedImageUrl;
                                       imageFile = File(updatedImageUrl);
                                       plantTypeController.text = guessPlantType;
                                   });
@@ -198,6 +203,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                                 return SelectImageDialog(
                                   onImageSelected: (updatedImageUrl, guessPlantType) {
                                     setState(() {
+                                      saveUrl = updatedImageUrl;
                                       imageFile = File(updatedImageUrl);
                                       plantTypeController.text = guessPlantType;
                                     });
@@ -352,6 +358,12 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                       checkDateToast();
                     } else {
                       addPlant();
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Main(),
+                        ),
+                      );
                     }
                   },
                   color: const Color(0xff169384),
@@ -395,9 +407,8 @@ class SelectImageDialog extends StatelessWidget {
       final result = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ImageCheckScreen(
-            imageUrl: imageUrl,
-          ),
+          builder: (context) =>
+              ImageCheckScreen(imageUrl: imageUrl),
         ),
       );
 

@@ -4,6 +4,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:planit/AddMyPlant.dart';
 import 'package:http/http.dart' as http;
+import 'package:planit/Setting/UserAuth.dart';
+
+import 'MyPlantDetailsScreen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -92,7 +95,7 @@ class HomeScreen extends StatelessWidget {
               width: 305,
               height: 210,
               child: FutureBuilder<List<MyPlant>>(
-                future: getUserPlants('sky'),
+                future: getUserPlants(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // 데이터가 아직 로드되지 않은 경우 로딩 화면을 보여줄 수 있습니다.
@@ -113,9 +116,11 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Future<List<MyPlant>> getUserPlants(String userId) async {
+  Future<List<MyPlant>> getUserPlants() async {
+
+    String? userId = await UserAuthManager.getUserId();
     final response = await http.get(
-      Uri.parse('http://10.199.228.144:3000/userPlants/$userId'),
+      Uri.parse('http://143.248.192.43:3000/userPlants/$userId'),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
@@ -161,7 +166,18 @@ class MyPlantsGrid extends StatelessWidget {
       ),
       itemCount: myPlants.length,
       itemBuilder: (BuildContext context, int index) {
-        return _buildItemCard(myPlants[index]);
+        return GestureDetector(
+          onTap: () {
+            // 세부 정보가 있는 새 화면으로 이동
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyPlantDetailsScreen(myPlant: myPlants[index]),
+              ),
+            );
+          },
+          child: _buildItemCard(myPlants[index]),
+        );
       },
     );
   }
@@ -192,8 +208,8 @@ class MyPlantsGrid extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
-                child: Image.network(
-                  myPlant.imageUrl,
+                child: Image.file(
+                  File(myPlant.imageUrl as String),
                   fit: BoxFit.cover,
                 ),
               ),

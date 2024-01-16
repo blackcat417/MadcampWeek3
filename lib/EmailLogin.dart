@@ -50,7 +50,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
     Future<void> login() async {
       final response = await http.post(
-        Uri.parse('http://10.199.228.144:3000/login'), // 서버의 주소로 변경
+        Uri.parse('http://143.248.192.43:3000/login'), // 서버의 주소로 변경
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -70,7 +70,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
         await UserAuthManager.saveUserId(UserIdController.text);
         print('User ${await UserAuthManager.getUserId()} logged in.');
         loginToast();
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => Main()),
         );
