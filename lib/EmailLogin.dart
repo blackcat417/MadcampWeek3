@@ -182,10 +182,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                 top: 475.0,
                 child: TextButton(
                   onPressed: () {//버튼 클릭 시 Signup 화면으로 이동
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const SignupScreen()),
-                    );
+                    print('비밀번호 찾기 누름 근데 미구현임');
                   },
                   style: TextButton.styleFrom(
                     primary: Colors.black38,

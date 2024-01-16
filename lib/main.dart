@@ -36,11 +36,11 @@ class _MainState extends State<Main> {
 
   // 화면 리스트
   final List<Widget> _screens = [
-    const HomeScreen(),
-    const TodoScreen(),
-    const CommunityScreen(),
-    const MarketScreen(),
-    const MyPageScreen(),
+    HomeScreen(),
+    TodoScreen(),
+    CommunityScreen(),
+    MarketScreen(),
+    MyPageScreen(),
   ];
 
   // 탭 선택 시 호출될 함수
