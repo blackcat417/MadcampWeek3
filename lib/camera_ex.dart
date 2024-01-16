@@ -5,102 +5,103 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
 
 class CameraExample extends StatefulWidget {
-  const CameraExample({Key? key}) : super(key: key);
-
   @override
   _CameraExampleState createState() => _CameraExampleState();
 }
 
 class _CameraExampleState extends State<CameraExample> {
   File? _image;
-  final picker = ImagePicker();
   List? _outputs;
 
   // 앱이 실행될 때 loadModel 호출
   @override
   void initState() {
     super.initState();
-    loadModel().then((value) {
-      setState(() {});
-    });
+    loadModel();
   }
 
   // 모델과 label.txt를 가져온다.
-  loadModel() async {
-    await Tflite.loadModel(
-      model: "lite-model_aiy_vision_classifier_plants_V1_3.tflite",
-      labels: "plant_labels.txt",
-    ).then((value) {
-      setState(() {
-        //_loading = false;
-      });
-    });
+  Future<void> loadModel() async {
+    try {
+      await Tflite.loadModel(
+        model: "assets/model_unquant.tflite",
+        labels: "assets/labels.txt",
+      );
+    } catch (e) {
+      print('Error loading model: $e');
+    }
   }
 
   // 비동기 처리를 통해 카메라와 갤러리에서 이미지를 가져온다.
   Future getImage(ImageSource imageSource) async {
-    final image = await picker.pickImage(source: imageSource);
+    final image = await ImagePicker().pickImage(source: imageSource);
 
     setState(() {
-      _image = File(image!.path); // 가져온 이미지를 _image에 저장
+      _image = File(image!.path);
     });
-    await classifyImage(File(image!.path)); // 가져온 이미지를 분류 하기 위해 await을 사용
+    await classifyImage(File(image!.path));
   }
 
   // 이미지 분류
-  Future classifyImage(File image) async {
-    try {
-      print("Image Path: ${image.path}");
-      var output = await Tflite.runModelOnImage(
-        path: image.path,
-        imageMean: 0.0,
-        imageStd: 255.0,
-        numResults: 2,
-        threshold: 0.2,
-        asynch: true,
-      );
-      print("Classification Result: $output");
-      setState(() {
-        _outputs = output;
-      });
-    } catch (e) {
-      print("Error during classification: $e");
-    }
-  }
+  Future<void> classifyImage(File image) async {
+    print("Image path: ${image.path}");
+    var output = await Tflite.runModelOnImage(
+      path: image.path,
+      imageMean: 0.0,
+      imageStd: 255.0,
+      numResults: 1,
+      threshold: 0.0,
+      asynch: true,
+    );
+    print("Output: $output");
+    setState(() {
+      _outputs = output;
+    });
 
+    // 결과 다이얼로그 표시
+    recycleDialog();
+  }
 
   // 이미지를 보여주는 위젯
   Widget showImage() {
     return Container(
-        color: const Color(0xffd0cece),
-        margin: EdgeInsets.only(left: 95, right: 95),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.width,
-        child: Center(
-            child: _image == null
-                ? Text('No image selected.')
-                : Image.file(File(_image!.path))));
+      color: const Color(0xffd0cece),
+      margin: EdgeInsets.only(left: 95, right: 95),
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.width,
+      child: Center(
+        child: _image == null
+            ? Text('No image selected.')
+            : Image.file(File(_image!.path)),
+      ),
+    );
   }
 
-  recycleDialog() {
-    print("Classification Result: $_outputs");
-
-    _outputs != null
-        ? showDialog(
+  // 결과 다이얼로그
+  void recycleDialog() {
+    if (_outputs != null) {
+      showDialog(
         context: context,
-        barrierDismissible:
-        false, // barrierDismissible - Dialog를 제외한 다른 화면 터치 x
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            // RoundedRectangleBorder - Dialog 화면 모서리 둥글게 조절
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  _outputs![0]['label'].toString().toUpperCase(),
+                  'Class: ${_outputs![0]['label']}',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15.0,
+                    background: Paint()..color = Colors.white,
+                  ),
+                ),
+                Text(
+                  'Confidence: ${( _outputs![0]['confidence'] * 100).toStringAsFixed(2)}%',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 15.0,
@@ -120,8 +121,10 @@ class _CameraExampleState extends State<CameraExample> {
               )
             ],
           );
-        })
-        : showDialog(
+        },
+      );
+    } else {
+      showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -150,58 +153,54 @@ class _CameraExampleState extends State<CameraExample> {
               )
             ],
           );
-        });
+        },
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // 화면 세로 고정
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
     return Scaffold(
-        backgroundColor: const Color(0xfff4f3f9),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Classify',
-              style: TextStyle(fontSize: 25, color: const Color(0xff1ea271)),
-            ),
-            SizedBox(height: 25.0),
-            showImage(),
-            SizedBox(
-              height: 50.0,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                // 카메라 촬영 버튼
-                FloatingActionButton(
-                  child: Icon(Icons.add_a_photo),
-                  tooltip: 'pick Iamge',
-                  onPressed: () async {
-                    await getImage(ImageSource.camera);
-                    recycleDialog();
-                  },
-                ),
-
-                // 갤러리에서 이미지를 가져오는 버튼
-                FloatingActionButton(
-                  child: Icon(Icons.wallpaper),
-                  tooltip: 'pick Iamge',
-                  onPressed: () async {
-                    await getImage(ImageSource.gallery);
-                    recycleDialog();
-                  },
-                ),
-              ],
-            )
-          ],
-        ));
+      backgroundColor: const Color(0xfff4f3f9),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Classify',
+            style: TextStyle(fontSize: 25, color: const Color(0xff1ea271)),
+          ),
+          SizedBox(height: 25.0),
+          showImage(),
+          SizedBox(
+            height: 50.0,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              FloatingActionButton(
+                child: Icon(Icons.add_a_photo),
+                tooltip: 'Pick Image',
+                onPressed: () async {
+                  await getImage(ImageSource.camera);
+                },
+              ),
+              FloatingActionButton(
+                child: Icon(Icons.wallpaper),
+                tooltip: 'Pick Image',
+                onPressed: () async {
+                  await getImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 
-  // 앱이 종료될 때
   @override
   void dispose() {
     Tflite.close();

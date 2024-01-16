@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:planit/EmailLogin.dart';
 import 'package:planit/Setting/UserAuth.dart';
-import 'package:planit/camera_ex.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'AddMyPlant_ImageCheck.dart';
 
 class AddMyPlantScreen extends StatefulWidget {
   const AddMyPlantScreen({super.key});
@@ -358,6 +358,31 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 }
 
 class SelectImageDialog extends StatelessWidget {
+  Future<void> _getImageFromCamera(BuildContext context) async {
+    final XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+    );
+
+    if (pickedFile != null) {
+      String imageUrl = pickedFile.path;
+      print('Camera Image URL: $imageUrl');
+      _navigateToDisplayImageScreen(context, imageUrl);
+
+    }
+  }
+
+  Future<void> _getImageFromGallery(BuildContext context) async {
+    final XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (pickedFile != null) {
+      String imageUrl = pickedFile.path;
+      print('Gallery Image URL: $imageUrl');
+      _navigateToDisplayImageScreen(context, imageUrl);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -375,18 +400,14 @@ class SelectImageDialog extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
-            onPressed: () {
-              //카메라로 전환
-            },
+            onPressed: () => _getImageFromCamera(context),
             icon: Icon(Icons.photo_camera),
             iconSize: 50,
             color: Color(0xFF4CACA8),
           ),
-          SizedBox(width: 40), //사이에 박스를 추가해서 아이콘 간격 조절
+          SizedBox(width: 40),
           IconButton(
-            onPressed: () {
-              //갤러리로 전환
-            },
+            onPressed: () => _getImageFromGallery(context),
             icon: Icon(Icons.wallpaper),
             iconSize: 50,
             color: Color(0xFF4CACA8),
@@ -395,4 +416,13 @@ class SelectImageDialog extends StatelessWidget {
       ),
     );
   }
+}
+
+void _navigateToDisplayImageScreen(BuildContext context, String imageUrl) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ImageCheckScreen(imageUrl: imageUrl),
+    ),
+  );
 }

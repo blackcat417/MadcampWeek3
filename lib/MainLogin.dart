@@ -84,11 +84,10 @@ class _MainLoginState extends State<MainLoginScreen> {
             left: 50.0,
             child: TextButton(
               onPressed: () {
-                //버튼 클릭 시 EmailLogin 화면으로 이동
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const CameraExample()),
+                      builder: (context) => CameraExample()),
                 );
               },
               style: TextButton.styleFrom(
