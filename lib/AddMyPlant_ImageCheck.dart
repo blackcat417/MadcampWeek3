@@ -4,14 +4,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:planit/EmailLogin.dart';
-import 'package:planit/camera_ex.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ImageCheckScreen extends StatelessWidget {
   final String imageUrl;
+  final String guessPlantType;
 
-  ImageCheckScreen({required this.imageUrl});
+  ImageCheckScreen({required this.imageUrl, required this.guessPlantType});
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class ImageCheckScreen extends StatelessWidget {
             left: (screenWidth - 300) / 2,
             top: 500.0,
             child: Text(
-              '반려식물은 땡땡땡 해당 결과가 정확한가요?',
+              '${guessPlantType}',
               textAlign: TextAlign.center,
             ),
           ),
@@ -77,7 +77,7 @@ class ImageCheckScreen extends StatelessWidget {
                   context,
                   {
                     'imageUrl': imageUrl,
-                    'guessPlantType': 'Yes from Screen 2',
+                    'guessPlantType': guessPlantType,
                   },
                 );
               },
@@ -108,7 +108,7 @@ class ImageCheckScreen extends StatelessWidget {
                   context,
                   {
                     'imageUrl': imageUrl,
-                    'guessPlantType': 'No from Screen 2',
+                    'guessPlantType': '',
                   },
                 );
               },

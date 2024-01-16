@@ -7,7 +7,7 @@ import 'package:planit/Home.dart';
 import 'package:planit/Setting/UserAuth.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:tflite/tflite.dart';
 import 'AddMyPlant_ImageCheck.dart';
 import 'main.dart';
 
@@ -15,11 +15,28 @@ class AddMyPlantScreen extends StatefulWidget {
   const AddMyPlantScreen({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _AddMyPlantScreenState createState() => _AddMyPlantScreenState();
 }
 
 class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
+  @override
+  void initState() {
+    super.initState();
+    loadModel();
+  }
+
+  // 모델과 label.txt를 가져온다.
+  Future<void> loadModel() async {
+    try {
+      await Tflite.loadModel(
+        model: "assets/model_unquant.tflite",
+        labels: "assets/labels.txt",
+      );
+    } catch (e) {
+      print('Error loading model: $e');
+    }
+  }
+
   DateTime selectedDate = DateTime.now();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController plantTypeController = TextEditingController();
@@ -391,11 +408,32 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 typedef ImageSelectedCallback = void Function(String updatedImageUrl, String guessPlantType);
 
 class SelectImageDialog extends StatelessWidget {
+  File? _image;
+  List<dynamic>? _outputs;
+
+  Future<void> classifyImage(File image) async {
+    try {
+      print("Image path: ${image.path}");
+      var output = await Tflite.runModelOnImage(
+        path: image.path,
+        imageMean: 0.0,
+        imageStd: 255.0,
+        numResults: 1,
+        threshold: 0.0,
+        asynch: true,
+      );
+      print("Output: $output");
+      _outputs = output; // _outputs 변수 업데이트
+    } catch (e) {
+      print('Error during image classification: $e');
+    }
+  }
+
   // 콜백 함수 변수
   final ImageSelectedCallback onImageSelected;
-
   // 생성자에서 콜백 함수를 받음
   SelectImageDialog({required this.onImageSelected});
+
   Future<void> _getImageFromCamera(BuildContext context) async {
     final XFile? pickedFile = await ImagePicker().pickImage(
       source: ImageSource.camera,
@@ -404,22 +442,28 @@ class SelectImageDialog extends StatelessWidget {
     if (pickedFile != null) {
       String imageUrl = pickedFile.path;
       print('Camera Image URL: $imageUrl');
+
+      await classifyImage(File(pickedFile.path));
+
+      print('분류 완료된 다음에 ${_outputs![0]['label']}');
+      String guessPlantType = _outputs![0]['label'];
+
       final result = await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) =>
-              ImageCheckScreen(imageUrl: imageUrl),
+              ImageCheckScreen(imageUrl: imageUrl, guessPlantType: guessPlantType),
         ),
       );
 
       final updatedImageUrl = result['imageUrl'];
-      final guessPlantType = result['guessPlantType'];
+      final updatedguessPlantType = result['guessPlantType'];
 
       print('Received updatedImageUrl: $updatedImageUrl');
-      print('Received textData: $guessPlantType');
+      print('Received textData: $updatedguessPlantType');
 
       // 콜백 함수 호출
-      onImageSelected(updatedImageUrl, guessPlantType);
+      onImageSelected(updatedImageUrl, updatedguessPlantType);
 
       Navigator.pop(context);
     }
@@ -433,22 +477,28 @@ class SelectImageDialog extends StatelessWidget {
     if (pickedFile != null) {
       String imageUrl = pickedFile.path;
       print('Gallery Image URL: $imageUrl');
+
+      await classifyImage(File(pickedFile.path));
+
+      print('분류 완료된 다음에 ${_outputs![0]['label']}');
+      String guessPlantType = _outputs![0]['label'];
+
       final result = await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) =>
-              ImageCheckScreen(imageUrl: imageUrl),
+              ImageCheckScreen(imageUrl: imageUrl, guessPlantType: guessPlantType),
         ),
       );
 
       final updatedImageUrl = result['imageUrl'];
-      final guessPlantType = result['guessPlantType'];
+      final updatedguessPlantType = result['guessPlantType'];
 
       print('Received updatedImageUrl: $updatedImageUrl');
-      print('Received textData: $guessPlantType');
+      print('Received textData: $updatedguessPlantType');
 
       // 콜백 함수 호출
-      onImageSelected(updatedImageUrl, guessPlantType);
+      onImageSelected(updatedImageUrl, updatedguessPlantType);
 
       Navigator.pop(context);
     }
@@ -488,3 +538,5 @@ class SelectImageDialog extends StatelessWidget {
     );
   }
 }
+
+
