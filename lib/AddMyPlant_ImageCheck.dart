@@ -73,8 +73,13 @@ class ImageCheckScreen extends StatelessWidget {
             width: 140,
             child: MaterialButton(
               onPressed: () async {
-                
-
+                Navigator.pop(
+                  context,
+                  {
+                    'imageUrl': imageUrl,
+                    'guessPlantType': 'Yes from Screen 2',
+                  },
+                );
               },
               color: const Color(0xff4dafac),
               shape: RoundedRectangleBorder(
@@ -98,7 +103,15 @@ class ImageCheckScreen extends StatelessWidget {
             top: 550.0,
             width: 140,
             child: MaterialButton(
-              onPressed: () {},
+              onPressed: () async {
+                Navigator.pop(
+                  context,
+                  {
+                    'imageUrl': imageUrl,
+                    'guessPlantType': 'No from Screen 2',
+                  },
+                );
+              },
               color: const Color(0xffebd9c1),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),

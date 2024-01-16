@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:planit/Setting/UserAuth.dart';
@@ -9,7 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'AddMyPlant_ImageCheck.dart';
 
 class AddMyPlantScreen extends StatefulWidget {
-  const AddMyPlantScreen({super.key});
+  const AddMyPlantScreen({Key? key}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -22,6 +23,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
   final TextEditingController plantTypeController = TextEditingController();
   final TextEditingController nicknameController = TextEditingController();
   final TextEditingController memoController = TextEditingController();
+  File? imageFile; // 현재 선택된 파일을 추적하기 위한 변수
 
   void checkPlantTypeToast() {
     Fluttertoast.showToast(
@@ -92,7 +94,8 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
         },
         body: jsonEncode(<String, dynamic>{
           'UserId': await UserAuthManager.getUserId(),
-          'imageUrl': 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Nelumno_nucifera_open_flower_-_botanic_garden_adelaide2.jpg',
+          'imageUrl':
+              'https://upload.wikimedia.org/wikipedia/commons/d/d3/Nelumno_nucifera_open_flower_-_botanic_garden_adelaide2.jpg',
           'plantType': plantTypeController.text,
           'nickname': nicknameController.text,
           'date': dateController.text,
@@ -139,8 +142,10 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                   width: 300.0,
                   height: 150.0,
                   decoration: BoxDecoration(
-                    image: const DecorationImage(
-                      image: AssetImage('assets/addplant_image.jpg'),
+                    image: DecorationImage(
+                      image: imageFile != null
+                          ? FileImage(imageFile!) as ImageProvider<Object>
+                          : AssetImage('assets/addplant_image.jpg'),
                       fit: BoxFit.cover,
                     ),
                     borderRadius: BorderRadius.circular(15.0),
@@ -191,8 +196,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                         ),
                       ),
                     ],
-                  )
-              ),
+                  )),
 
               Positioned(
                 right: (screenWidth - 300) / 2,
@@ -359,6 +363,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
 }
 
 class SelectImageDialog extends StatelessWidget {
+
   Future<void> _getImageFromCamera(BuildContext context) async {
     final XFile? pickedFile = await ImagePicker().pickImage(
       source: ImageSource.camera,
@@ -367,8 +372,22 @@ class SelectImageDialog extends StatelessWidget {
     if (pickedFile != null) {
       String imageUrl = pickedFile.path;
       print('Camera Image URL: $imageUrl');
-      _navigateToDisplayImageScreen(context, imageUrl);
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ImageCheckScreen(
+            imageUrl: imageUrl,
+          ),
+        ),
+      );
 
+      final updatedImageUrl = result['imageUrl'];
+      final guessPlantType = result['guessPlantType'];
+
+      print('Received updatedImageUrl: $updatedImageUrl');
+      print('Received textData: $guessPlantType');
+
+      Navigator.pop(context);
     }
   }
 
@@ -380,7 +399,21 @@ class SelectImageDialog extends StatelessWidget {
     if (pickedFile != null) {
       String imageUrl = pickedFile.path;
       print('Gallery Image URL: $imageUrl');
-      _navigateToDisplayImageScreen(context, imageUrl);
+      final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              ImageCheckScreen(imageUrl: imageUrl),
+        ),
+      );
+
+      final updatedImageUrl = result['imageUrl'];
+      final guessPlantType = result['guessPlantType'];
+
+      print('Received updatedImageUrl: $updatedImageUrl');
+      print('Received textData: $guessPlantType');
+
+      Navigator.pop(context);
     }
   }
 
@@ -417,13 +450,4 @@ class SelectImageDialog extends StatelessWidget {
       ),
     );
   }
-}
-
-void _navigateToDisplayImageScreen(BuildContext context, String imageUrl) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => ImageCheckScreen(imageUrl: imageUrl),
-    ),
-  );
 }

@@ -44,22 +44,26 @@ class _CameraExampleState extends State<CameraExample> {
 
   // 이미지 분류
   Future<void> classifyImage(File image) async {
-    print("Image path: ${image.path}");
-    var output = await Tflite.runModelOnImage(
-      path: image.path,
-      imageMean: 0.0,
-      imageStd: 255.0,
-      numResults: 1,
-      threshold: 0.0,
-      asynch: true,
-    );
-    print("Output: $output");
-    setState(() {
-      _outputs = output;
-    });
+    try {
+      print("Image path: ${image.path}");
+      var output = await Tflite.runModelOnImage(
+        path: image.path,
+        imageMean: 0.0,
+        imageStd: 255.0,
+        numResults: 1,
+        threshold: 0.0,
+        asynch: true,
+      );
+      print("Output: $output");
+      setState(() {
+        _outputs = output;
+      });
 
-    // 결과 다이얼로그 표시
-    recycleDialog();
+      // 결과 다이얼로그 표시
+      recycleDialog();
+    } catch (e) {
+      print('Error during image classification: $e');
+    }
   }
 
   // 이미지를 보여주는 위젯
@@ -78,9 +82,9 @@ class _CameraExampleState extends State<CameraExample> {
   }
 
   // 결과 다이얼로그
-  void recycleDialog() {
-    if (_outputs != null) {
-      showDialog(
+  Future<void> showResultDialog() async {
+    if (_outputs != null && _outputs!.isNotEmpty) {
+      await showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -124,7 +128,7 @@ class _CameraExampleState extends State<CameraExample> {
         },
       );
     } else {
-      showDialog(
+      await showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -157,6 +161,12 @@ class _CameraExampleState extends State<CameraExample> {
       );
     }
   }
+
+// 결과 다이얼로그 표시
+  void recycleDialog() {
+    showResultDialog();
+  }
+
 
   @override
   Widget build(BuildContext context) {
