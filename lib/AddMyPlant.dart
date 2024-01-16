@@ -86,7 +86,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
       print('${memoController.text},${memoController.text.runtimeType}');
 
       final response = await http.post(
-        Uri.parse('http://143.248.192.141:3000/addPlant'), // 서버의 주소로 변경
+        Uri.parse('http://10.199.228.144:3000/addPlant'), // 서버의 주소로 변경
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
@@ -191,7 +191,8 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                         ),
                       ),
                     ],
-                  )),
+                  )
+              ),
 
               Positioned(
                 right: (screenWidth - 300) / 2,

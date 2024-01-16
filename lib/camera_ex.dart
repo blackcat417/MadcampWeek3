@@ -11,7 +11,7 @@ class CameraExample extends StatefulWidget {
 
 class _CameraExampleState extends State<CameraExample> {
   File? _image;
-  List? _outputs;
+  List<dynamic>? _outputs;
 
   // 앱이 실행될 때 loadModel 호출
   @override

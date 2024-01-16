@@ -115,7 +115,7 @@ class HomeScreen extends StatelessWidget {
 
   Future<List<MyPlant>> getUserPlants(String userId) async {
     final response = await http.get(
-      Uri.parse('http://143.248.192.141:3000/userPlants/$userId'),
+      Uri.parse('http://10.199.228.144:3000/userPlants/$userId'),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
