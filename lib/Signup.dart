@@ -62,7 +62,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
     Future<void> signup() async {
       final response = await http.post(
-        Uri.parse('http://143.248.192.141:3000/signup'), // 서버의 주소로 변경
+        Uri.parse('http://10.199.228.144:3000/signup'), // 서버의 주소로 변경
         headers: <String, String>{
           'Content-Type': 'application/json',
         },

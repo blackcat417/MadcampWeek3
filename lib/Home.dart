@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:planit/AddMyPlant.dart';
 import 'package:http/http.dart' as http;
@@ -86,15 +89,51 @@ class HomeScreen extends StatelessWidget {
             right: (screenWidth - 300) / 2,
             top: 360.0,
             child: SizedBox(
-              // 그리드뷰의 전체 크기 제한
               width: 305,
               height: 210,
-              child: MyPlantsGrid(),
+              child: FutureBuilder<List<MyPlant>>(
+                future: getUserPlants('sky'),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    // 데이터가 아직 로드되지 않은 경우 로딩 화면을 보여줄 수 있습니다.
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    // 에러가 발생한 경우 에러 메시지를 표시할 수 있습니다.
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    // 데이터가 성공적으로 로드된 경우 MyPlantsGrid를 반환합니다.
+                    return MyPlantsGrid(myPlants: snapshot.data!);
+                  }
+                },
+              ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<List<MyPlant>> getUserPlants(String userId) async {
+    final response = await http.get(
+      Uri.parse('http://10.199.228.144:3000/userPlants/$userId'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+    );
+
+
+    if (response.statusCode == 200) {
+      final List<dynamic> plantData = json.decode(response.body)['userPlants'];
+      return plantData
+          .map((item) => MyPlant(
+                item['nickname'],
+                item['date'],
+                item['imageUrl'],
+              ))
+          .toList();
+    } else {
+      throw Exception('Failed to load user plants');
+    }
   }
 }
 
@@ -106,15 +145,10 @@ class MyPlant {
   MyPlant(this.nickname, this.date, this.imageUrl);
 }
 
-final List<MyPlant> MyPlants = [
-  MyPlant('로자니아', '2024-01-16',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Nelumno_nucifera_open_flower_-_botanic_garden_adelaide2.jpg/300px-Nelumno_nucifera_open_flower_-_botanic_garden_adelaide2.jpg'),
-  MyPlant('스투키', '2024-01-30',
-      'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbSAyPb%2FbtqyGb2Mh4V%2F4YxjkNmePtvb788K1jYa40%2Fimg.jpg'),
-];
-
 class MyPlantsGrid extends StatelessWidget {
-  const MyPlantsGrid({super.key});
+  final List<MyPlant> myPlants;
+
+  const MyPlantsGrid({Key? key, required this.myPlants}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -122,12 +156,12 @@ class MyPlantsGrid extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 1,
-        mainAxisSpacing: 15.0, //아이템 간 메인이 되는 축 간격 조절
-        childAspectRatio: 5 / 3.8, //그리드뷰 안의 아이템 비율 조절
+        mainAxisSpacing: 15.0,
+        childAspectRatio: 5 / 3.8,
       ),
-      itemCount: MyPlants.length,
+      itemCount: myPlants.length,
       itemBuilder: (BuildContext context, int index) {
-        return _buildItemCard(MyPlants[index]);
+        return _buildItemCard(myPlants[index]);
       },
     );
   }
