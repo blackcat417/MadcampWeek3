@@ -1,6 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'Home.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'Setting/UserAuth.dart';
 
 class MyPlantDetailsScreen extends StatefulWidget {
   final MyPlant myPlant;
@@ -13,6 +17,78 @@ class MyPlantDetailsScreen extends StatefulWidget {
 }
 
 class _MyPlantDetailsScreenState extends State<MyPlantDetailsScreen> {
+  String? newImageUrl;
+  List<String> galleryImages = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchGalleryData();
+  }
+
+  Future<void> _takePicture() async {
+    final XFile? picture = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+    );
+
+    if (picture != null) {
+      // 여기서 사진을 업로드하거나 필요한 다른 동작을 수행할 수 있습니다.
+      setState(() {
+        newImageUrl = picture.path;
+      });
+
+      print('Image URL: $newImageUrl');
+      uploadImage(newImageUrl!);
+    }
+  }
+
+  Future<void> uploadImage(String imageUrl) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://143.248.192.43:3000/plant-gallery/${widget.myPlant.nickname}'),
+        headers: <String, String>{'Content-Type': 'application/json'},
+        body: jsonEncode(<String, dynamic>{
+          'UserId' : await UserAuthManager.getUserId(),
+          'imageUrl': imageUrl,
+          'nickname': widget.myPlant.nickname
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Image added to gallery successfully');
+        fetchGalleryData(); // Refresh gallery after upload
+      } else {
+        // Handle error
+        print('Failed to add image to gallery: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle error
+      print('Error adding image to gallery: $error');
+    }
+  }
+
+  Future<void> fetchGalleryData() async {
+    try {
+      // 닉네임에 해당하는 갤러리 데이터를 가져오기 위한 API 엔드포인트
+      final response = await http.get(Uri.parse('http://143.248.192.43:3000/plant-gallery/${widget.myPlant.nickname}'));
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        // 갤러리 데이터에서 이미지 URL 리스트 추출
+        final List<String> images = List<String>.from(data['gallery']);
+        setState(() {
+          galleryImages = images;
+        });
+      } else {
+        // 실패한 경우 에러 처리
+        print('Failed to load gallery data');
+      }
+    } catch (error) {
+      // 예외 처리
+      print('Error fetching gallery data: $error');
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -50,6 +126,20 @@ class _MyPlantDetailsScreenState extends State<MyPlantDetailsScreen> {
                   fit: BoxFit.cover,
                 ),
               ),
+            ),
+          ),
+
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              margin: EdgeInsets.only(bottom: 280.0),
+              width: 50,
+              height: 50,
+              child: IconButton(
+                icon: Icon(Icons.photo_camera),
+                onPressed: () {
+                  _takePicture();
+                },)
             ),
           ),
 
@@ -110,7 +200,7 @@ class _MyPlantDetailsScreenState extends State<MyPlantDetailsScreen> {
               child: SizedBox(
                 width: 305,
                 height: 210,
-                child: MyPlantsDetailGrid(),
+                child: MyPlantsDetailGrid(galleryImages: galleryImages),
               ),
             ),
           ),
@@ -120,72 +210,38 @@ class _MyPlantDetailsScreenState extends State<MyPlantDetailsScreen> {
   }
 }
 
-final myPlantsDetail = [
-  {
-    "color": Colors.amber,
-  },
-  {
-    "color": Colors.lightBlue,
-  },
-  {
-    "color": Colors.redAccent,
-  },
-  {
-    "color": Colors.indigo,
-  },
-  {
-    "color": Colors.yellowAccent,
-  },
-  {
-    "color": Colors.greenAccent,
-  },
-  {
-    "color": Colors.amber,
-  },
-  {
-    "color": Colors.lightBlue,
-  },
-  {
-    "color": Colors.redAccent,
-  },
-  {
-    "color": Colors.indigo,
-  },
-  {
-    "color": Colors.yellowAccent,
-  },
-  {
-    "color": Colors.greenAccent,
-  },
-];
-
 class MyPlantsDetailGrid extends StatelessWidget {
+  final List<String> galleryImages;
+
+  MyPlantsDetailGrid({required this.galleryImages});
+
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       scrollDirection: Axis.vertical,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        mainAxisSpacing: 1.0,
+        crossAxisSpacing: 8.0,
+        mainAxisSpacing: 8.0,
       ),
-      itemCount: myPlantsDetail.length,
+      itemCount: galleryImages.length,
       itemBuilder: (BuildContext context, int index) {
         return postContainer(
-          colorName: myPlantsDetail[index]["color"] as Color,
+          imageUrl: galleryImages[index],
         );
       },
     );
   }
 
-  Container postContainer(
-      {Color colorName = Colors.black}) {
+  Container postContainer({required String imageUrl}) {
     return Container(
       width: 90,
       height: 90,
-      child: Column(
-        children: [
-          Container(width: 90, height: 90, color: colorName),
-        ],
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: FileImage(File(imageUrl)),
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
