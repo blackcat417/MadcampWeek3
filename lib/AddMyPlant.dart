@@ -172,7 +172,14 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return SelectImageDialog();
+                              return SelectImageDialog(
+                                onImageSelected: (updatedImageUrl, guessPlantType) {
+                                  setState(() {
+                                      imageFile = File(updatedImageUrl);
+                                      plantTypeController.text = guessPlantType;
+                                  });
+                                },
+                              );
                             },
                           );
                         },
@@ -188,7 +195,14 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
-                                return SelectImageDialog();
+                                return SelectImageDialog(
+                                  onImageSelected: (updatedImageUrl, guessPlantType) {
+                                    setState(() {
+                                      imageFile = File(updatedImageUrl);
+                                      plantTypeController.text = guessPlantType;
+                                    });
+                                  },
+                                );
                               },
                             );
                           },
@@ -362,8 +376,14 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
   }
 }
 
-class SelectImageDialog extends StatelessWidget {
+typedef ImageSelectedCallback = void Function(String updatedImageUrl, String guessPlantType);
 
+class SelectImageDialog extends StatelessWidget {
+  // 콜백 함수 변수
+  final ImageSelectedCallback onImageSelected;
+
+  // 생성자에서 콜백 함수를 받음
+  SelectImageDialog({required this.onImageSelected});
   Future<void> _getImageFromCamera(BuildContext context) async {
     final XFile? pickedFile = await ImagePicker().pickImage(
       source: ImageSource.camera,
@@ -386,6 +406,9 @@ class SelectImageDialog extends StatelessWidget {
 
       print('Received updatedImageUrl: $updatedImageUrl');
       print('Received textData: $guessPlantType');
+
+      // 콜백 함수 호출
+      onImageSelected(updatedImageUrl, guessPlantType);
 
       Navigator.pop(context);
     }
@@ -412,6 +435,9 @@ class SelectImageDialog extends StatelessWidget {
 
       print('Received updatedImageUrl: $updatedImageUrl');
       print('Received textData: $guessPlantType');
+
+      // 콜백 함수 호출
+      onImageSelected(updatedImageUrl, guessPlantType);
 
       Navigator.pop(context);
     }
