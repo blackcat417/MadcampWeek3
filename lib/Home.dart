@@ -192,8 +192,8 @@ class MyPlantsGrid extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15.0),
-                child: Image.network(
-                  myPlant.imageUrl,
+                child: Image.file(
+                  myPlant.imageUrl as File,
                   fit: BoxFit.cover,
                 ),
               ),

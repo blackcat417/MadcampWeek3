@@ -24,6 +24,8 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
   final TextEditingController nicknameController = TextEditingController();
   final TextEditingController memoController = TextEditingController();
   File? imageFile; // 현재 선택된 파일을 추적하기 위한 변수
+  String? saveUrl; // Add this line to store the updated image URL
+
 
   void checkPlantTypeToast() {
     Fluttertoast.showToast(
@@ -94,8 +96,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
         },
         body: jsonEncode(<String, dynamic>{
           'UserId': await UserAuthManager.getUserId(),
-          'imageUrl':
-              'https://upload.wikimedia.org/wikipedia/commons/d/d3/Nelumno_nucifera_open_flower_-_botanic_garden_adelaide2.jpg',
+          'imageUrl': saveUrl,
           'plantType': plantTypeController.text,
           'nickname': nicknameController.text,
           'date': dateController.text,
@@ -177,6 +178,7 @@ class _AddMyPlantScreenState extends State<AddMyPlantScreen> {
                                   setState(() {
                                       imageFile = File(updatedImageUrl);
                                       plantTypeController.text = guessPlantType;
+                                      saveUrl = updatedImageUrl; // Store the updated image URL
                                   });
                                 },
                               );
