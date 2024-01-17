@@ -99,7 +99,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
               Positioned(
                 left: 50.0,
-                top: 250.0,
+                top: 300.0,
                 right: 50.0,
                 child: SizedBox(
                   width: 300,
@@ -127,7 +127,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
               Positioned(
                 left: 50.0,
-                top: 330.0,
+                top: 380.0,
                 right: 50.0,
                 child: SizedBox(
                   width: 300,
@@ -156,7 +156,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
               Positioned(
                 right: 50.0,
-                top: 410.0,
+                top: 460.0,
                 left: 50.0,
                 child: MaterialButton(
                   onPressed: () async {
@@ -179,7 +179,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
               Positioned(
                 left: screenWidth*0.15,
-                top: 475.0,
+                top: 525.0,
                 child: TextButton(
                   onPressed: () {//버튼 클릭 시 Signup 화면으로 이동
                     print('비밀번호 찾기 누름 근데 미구현임');
@@ -198,7 +198,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
               // 세로 구분선
               Positioned(
                 left: screenWidth * 0.5,
-                top: 485.0,
+                top: 535.0,
                 child: Container(
                   height: 30.0, // 세로 구분선의 높이
                   width: 1.0,   // 세로 구분선의 너비
@@ -208,7 +208,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
               Positioned(
                 right: screenWidth * 0.2,
-                top: 475.0,
+                top: 525.0,
                 child: TextButton(
                   onPressed: () {//버튼 클릭 시 Signup 화면으로 이동
                     Navigator.push(
@@ -229,7 +229,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
 
               Positioned(
                 right: 50.0,
-                top: 540.0,
+                top: 590.0,
                 left: 50.0,
                 child: MaterialButton(
                   onPressed: () {

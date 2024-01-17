@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:planit/Setting/Userauth.dart';
-import 'package:planit/camera_ex.dart';
 import 'EmailLogin.dart';
 import 'main.dart';
 
@@ -67,6 +66,7 @@ class _MainLoginState extends State<MainLoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
+        fit: StackFit.expand,
         children: [
           // 배경화면
           Container(
@@ -80,30 +80,7 @@ class _MainLoginState extends State<MainLoginScreen> {
 
           Positioned(
             right: 50.0,
-            top: 65.0,
-            left: 50.0,
-            child: TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CameraExample()),
-                );
-              },
-              style: TextButton.styleFrom(
-                primary: Colors.white,
-                textStyle: const TextStyle(
-                  fontSize: 30.0,
-                ),
-                backgroundColor: Colors.transparent,
-              ),
-              child: Text('카메라 테스트 화면 전환 임시 버튼'),
-            ),
-          ),
-
-          Positioned(
-            right: 50.0,
-            bottom: 115.0,
+            bottom: 180.0,
             left: 50.0,
             child: MaterialButton(
               onPressed: () {
@@ -122,7 +99,7 @@ class _MainLoginState extends State<MainLoginScreen> {
 
           Positioned(
             right: 50.0,
-            bottom: 65.0,
+            bottom: 130.0,
             left: 50.0,
             child: TextButton(
               onPressed: () {
@@ -136,7 +113,7 @@ class _MainLoginState extends State<MainLoginScreen> {
               style: TextButton.styleFrom(
                 primary: Colors.white,
                 textStyle: const TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 25.0,
                 ),
                 backgroundColor: Colors.transparent,
               ),

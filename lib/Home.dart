@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
 
           Positioned(
             right: (screenWidth - 300) / 2,
-            top: 130.0,
+            top: 200.0,
             child: GestureDetector(
               onTap: () {
                 // 클릭될 때 수행할 동작
@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
               },
               child: Container(
                 width: 300.0,
-                height: 180.0,
+                height: 220.0,
                 decoration: BoxDecoration(
                   image: const DecorationImage(
                     image: AssetImage('assets/addplant_image.jpg'),
@@ -64,7 +64,7 @@ class HomeScreen extends StatelessWidget {
                         '반려식물 등록하기',
                         style: TextStyle(
                           color: Color(0xFF025248),
-                          fontSize: 21.0,
+                          fontSize: 24.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -76,13 +76,13 @@ class HomeScreen extends StatelessWidget {
           ),
 
           Positioned(
-            left: screenWidth * 0.09,
-            top: 330.0,
+            left: screenWidth * 0.13,
+            top: 440.0,
             child: const Text(
               '나의 반려식물들',
               style: TextStyle(
                 color: Color(0xFF4CACA8),
-                fontSize: 18.0,
+                fontSize: 24.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -90,10 +90,10 @@ class HomeScreen extends StatelessWidget {
 
           Positioned(
             right: (screenWidth - 300) / 2,
-            top: 360.0,
+            top: 480.0,
             child: SizedBox(
               width: 305,
-              height: 210,
+              height: 230,
               child: FutureBuilder<List<MyPlant>>(
                 future: getUserPlants(),
                 builder: (context, snapshot) {
@@ -117,7 +117,6 @@ class HomeScreen extends StatelessWidget {
   }
 
   Future<List<MyPlant>> getUserPlants() async {
-
     String? userId = await UserAuthManager.getUserId();
     final response = await http.get(
       Uri.parse('http://143.248.192.43:3000/userPlants/$userId'),
@@ -126,7 +125,6 @@ class HomeScreen extends StatelessWidget {
       },
     );
 
-
     if (response.statusCode == 200) {
       final List<dynamic> plantData = json.decode(response.body)['userPlants'];
       return plantData
@@ -134,6 +132,8 @@ class HomeScreen extends StatelessWidget {
                 item['nickname'],
                 item['date'],
                 item['imageUrl'],
+                item['plantType'],
+                item['memo'],
               ))
           .toList();
     } else {
@@ -146,8 +146,10 @@ class MyPlant {
   final String nickname;
   final String date;
   final String imageUrl;
+  final String plantType;
+  final String memo;
 
-  MyPlant(this.nickname, this.date, this.imageUrl);
+  MyPlant(this.nickname, this.date, this.imageUrl, this.plantType, this.memo);
 }
 
 class MyPlantsGrid extends StatelessWidget {
@@ -172,7 +174,8 @@ class MyPlantsGrid extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => MyPlantDetailsScreen(myPlant: myPlants[index]),
+                builder: (context) =>
+                    MyPlantDetailsScreen(myPlant: myPlants[index]),
               ),
             );
           },
@@ -223,12 +226,12 @@ class MyPlantsGrid extends StatelessWidget {
                   Text(myPlant.date,
                       style: TextStyle(
                           color: Color(0xFF0D7064),
-                          fontSize: 13.0,
+                          fontSize: 16.0,
                           fontWeight: FontWeight.bold)),
                   Text(myPlant.nickname,
                       style: TextStyle(
                           color: Color(0xFF025248),
-                          fontSize: 21.0,
+                          fontSize: 24.0,
                           fontWeight: FontWeight.bold)),
                 ],
               ),

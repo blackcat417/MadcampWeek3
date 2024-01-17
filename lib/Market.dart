@@ -11,19 +11,8 @@ class MarketScreen extends StatelessWidget {
         children: [
           // Background image
           Image.asset(
-            'assets/planit_basicbackground_size.png',
+            'assets/market.png',
             fit: BoxFit.cover,
-          ),
-
-          // Overlayed button
-          Positioned(
-            bottom: 50.0,
-            child: ElevatedButton(
-              onPressed: () {
-                // Handle button press
-              },
-              child: Text('Market'),
-            ),
           ),
         ],
       ),
