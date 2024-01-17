@@ -6,8 +6,10 @@ import 'MainLogin.dart';
 import 'Market.dart';
 import 'MyPage.dart';
 import 'Todo.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-void main() {
+void main() async {
+  await initializeDateFormatting();
   runApp(const MyApp()); //앱 실행 명령어, 앱의 메인페이지를 적어주면 됨
 }
 
