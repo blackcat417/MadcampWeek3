@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'Setting/UserAuth.dart';
 
 class TodoScreen extends StatefulWidget {
@@ -121,7 +122,10 @@ class _TodoScreenState extends State<TodoScreen> {
                     future: fetchUserTodos(selectedDay.toString()),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return SpinKitFadingCircle(
+                          color: Color(0xff169384),
+                          size: 50.0,
+                        );
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else {

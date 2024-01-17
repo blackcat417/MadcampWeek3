@@ -6,6 +6,7 @@ import 'package:planit/AddMyPlant.dart';
 import 'package:http/http.dart' as http;
 import 'package:planit/Setting/UserAuth.dart';
 
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'MyPlantDetailsScreen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -99,7 +100,10 @@ class HomeScreen extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     // 데이터가 아직 로드되지 않은 경우 로딩 화면을 보여줄 수 있습니다.
-                    return CircularProgressIndicator();
+                    return SpinKitFadingCircle(
+                      color: Color(0xff169384),
+                      size: 50.0,
+                    );
                   } else if (snapshot.hasError) {
                     // 에러가 발생한 경우 에러 메시지를 표시할 수 있습니다.
                     return Text('Error: ${snapshot.error}');
