@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tflite/tflite.dart';
 import 'AddMyPlant_ImageCheck.dart';
 import 'main.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class AddMyPlantScreen extends StatefulWidget {
   const AddMyPlantScreen({Key? key}) : super(key: key);
@@ -410,6 +411,42 @@ typedef ImageSelectedCallback = void Function(String updatedImageUrl, String gue
 class SelectImageDialog extends StatelessWidget {
   List<dynamic>? _outputs;
 
+  void showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            width: 300.0,
+            height: 300.0,
+            padding: EdgeInsets.all(30.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬 추가
+              children: [
+                SpinKitFadingCube(
+                  color: Color(0xff169384),
+                  size: 50.0,
+                ),
+                SizedBox(height: 20.0),
+                Text(
+                  '사진 분석 중...',
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    // 다른 스타일 속성들도 필요에 따라 설정 가능
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+
+
   Future<void> classifyImage(File image) async {
     try {
       print("Image path: ${image.path}");
@@ -442,29 +479,35 @@ class SelectImageDialog extends StatelessWidget {
       String imageUrl = pickedFile.path;
       print('Camera Image URL: $imageUrl');
 
-      await classifyImage(File(pickedFile.path));
+      // 로딩 다이얼로그 표시
+      showLoadingDialog(context);
 
-      print('분류 완료된 다음에 ${_outputs![0]['label']}');
-      String guessPlantType = _outputs![0]['label'];
+      Future.delayed(Duration(seconds: 2), () async {
+        await classifyImage(File(pickedFile.path));
+        print('분류 완료된 다음에 ${_outputs![0]['label']}');
+        String guessPlantType = _outputs![0]['label'];
 
-      final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              ImageCheckScreen(imageUrl: imageUrl, guessPlantType: guessPlantType),
-        ),
-      );
+        final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                ImageCheckScreen(imageUrl: imageUrl, guessPlantType: guessPlantType),
+          ),
+        );
 
-      final updatedImageUrl = result['imageUrl'];
-      final updatedguessPlantType = result['guessPlantType'];
+        Navigator.pop(context);
+        Navigator.pop(context);
 
-      print('Received updatedImageUrl: $updatedImageUrl');
-      print('Received textData: $updatedguessPlantType');
+        final updatedImageUrl = result['imageUrl'];
+        final updatedguessPlantType = result['guessPlantType'];
 
-      // 콜백 함수 호출
-      onImageSelected(updatedImageUrl, updatedguessPlantType);
+        print('Received updatedImageUrl: $updatedImageUrl');
+        print('Received textData: $updatedguessPlantType');
 
-      Navigator.pop(context);
+        // 콜백 함수 호출
+        onImageSelected(updatedImageUrl, updatedguessPlantType);
+
+      });
     }
   }
 
@@ -473,10 +516,15 @@ class SelectImageDialog extends StatelessWidget {
       source: ImageSource.gallery,
     );
 
+
     if (pickedFile != null) {
       String imageUrl = pickedFile.path;
       print('Gallery Image URL: $imageUrl');
 
+
+      // 로딩 다이얼로그 표시
+      showLoadingDialog(context);
+      Future.delayed(Duration(seconds: 2), () async {
       await classifyImage(File(pickedFile.path));
 
       print('분류 완료된 다음에 ${_outputs![0]['label']}');
@@ -490,6 +538,9 @@ class SelectImageDialog extends StatelessWidget {
         ),
       );
 
+      Navigator.pop(context);
+      Navigator.pop(context);
+
       final updatedImageUrl = result['imageUrl'];
       final updatedguessPlantType = result['guessPlantType'];
 
@@ -499,7 +550,7 @@ class SelectImageDialog extends StatelessWidget {
       // 콜백 함수 호출
       onImageSelected(updatedImageUrl, updatedguessPlantType);
 
-      Navigator.pop(context);
+      });
     }
   }
 
